@@ -13,5 +13,5 @@
 
 # Features
 
-- [x] [cli/colors](lib/cli/colors)
+- [x] [cli/colors](lib/cli/stylize)
 - [ ] [logging](lib/logging)
