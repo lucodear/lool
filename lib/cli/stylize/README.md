@@ -4,7 +4,7 @@
 <br>
 <br>
 
-<p align="center"><b>lool » <code>cli/colors</code></b> is a set of utilities for colorizing console outputs.
+<p align="center"><b>lool » <code>cli/stylize</code></b> is a set of utilities for colorizing console outputs.
 </p>
 
 <br>
