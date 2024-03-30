@@ -33,3 +33,8 @@ tasks:
     desc: 🧪 test lool
     cmds:
       - cargo nextest run
+
+  publish:
+    desc: 🚀 publish lool
+    cmds:
+      - cargo publish --registry lugit

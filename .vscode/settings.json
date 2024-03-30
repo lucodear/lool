@@ -4,7 +4,7 @@
         "Taskfile.yaml": true,
         ".cocorc": true,
         ".task": true,
-        // ".cargo": true,
+        ".cargo": true,
         // "Cargo.toml": true,
 
         // 📦

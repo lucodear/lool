@@ -1,8 +1,8 @@
 [package]
 name = "lool"
-version = "0.0.0-alpha.0"
+version = "0.0.1"
 edition = "2021"
-description = "🧳 » lool » lucode.ar rust common utilities"
+description = "🧳 lool » lucode.ar rust common utilities"
 authors = ["Lucas Colombo <lucas@lucode.ar>"]
 
 [profile.release]
