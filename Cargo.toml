@@ -16,10 +16,15 @@ overflow-checks = false
 debug = 0
 debug-assertions = false
 
-[dependencies]
-eyre = { version = "0.6.12", default-features = false, features = ["auto-install"] }
-indoc = "2.0.4"
+[registry]
+default = "gitea"
 
-[[bin]]
-name = "lool"
-path = "src/main.rs"
+[registries.gitea]
+index = "sparse+http://lugit.local/api/packages/lucodear/cargo/"
+
+[lib]
+path = "lib/lib.rs"
+
+[dependencies]
+bitflags = "2.5.0"
+eyre = { version = "0.6.12", default-features = false }

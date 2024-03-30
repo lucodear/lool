@@ -20,6 +20,16 @@ tasks:
       - python check_size.py
 
   fmt:
-    desc: 🚀 format lool
+    desc: 🎨 format lool
     cmds:
       - cargo +nightly fmt --all
+
+  lint:
+    desc: 🧶 lint lool
+    cmds:
+      - cargo clippy --fix
+
+  test:
+    desc: 🧪 test lool
+    cmds:
+      - cargo nextest run

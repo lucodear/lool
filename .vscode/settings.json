@@ -4,7 +4,7 @@
         "Taskfile.yaml": true,
         ".cocorc": true,
         ".task": true,
-        ".cargo": true,
+        // ".cargo": true,
         // "Cargo.toml": true,
 
         // 📦
@@ -12,7 +12,7 @@
         "target": true,
 
         // 📝 readmes
-        "**/**/README.md": true,
+        // "**/**/README.md": true,
         "LICENSE": true,
 
         // 🗑️
