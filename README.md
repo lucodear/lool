@@ -13,8 +13,5 @@
 
 # Features
 
-- [ ] **logging**: A simple logging utility.
-- [ ] **cli**: Command-line interface utilities:
-    - [ ] **argparse**: A simple wrapper around `argparse`.
-    - [ ] **color**: `foo.<color>()` like extension methods for strings.
-- [ ] **case**: Case conversion utilities.
+- [x] [cli/colors](lib/cli/colors)
+- [ ] [logging](lib/logging)
