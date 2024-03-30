@@ -2,3 +2,6 @@
 
 askScope: false
 useEmoji: true
+scopes:
+  - ""
+  - "cli"

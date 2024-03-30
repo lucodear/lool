@@ -2,7 +2,7 @@
     "files.exclude": {
         // ⚙️ config
         "Taskfile.yaml": true,
-        ".cocorc": true,
+        // ".cocorc": true,
         ".task": true,
         ".cargo": true,
         // "Cargo.toml": true,
