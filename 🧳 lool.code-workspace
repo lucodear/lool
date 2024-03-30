@@ -12,9 +12,11 @@
         "lucodear-icons.activeIconPack": "rust_ferris",
         "lucodear-icons.folders.associations": {
             ".cargo": "rust",
+            "stylize": "theme"
         },
         "lucodear-icons.files.associations": {
         
-        }
+        },
+        "rust-analyzer.cargo.features": "all",
     }
 }

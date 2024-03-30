@@ -1,5 +1,5 @@
 use eyre::{set_hook, DefaultHandler, Result};
-use lool::cli::colors::{stylize, Stylize};
+use lool::cli::stylize::{stylize, Stylize};
 
 fn setup_eyre() {
     let _ = set_hook(Box::new(DefaultHandler::default_with));

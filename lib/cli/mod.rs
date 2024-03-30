@@ -1,1 +1,2 @@
-pub mod colors;
+#[cfg(feature = "cli-stylize")]
+pub mod stylize;

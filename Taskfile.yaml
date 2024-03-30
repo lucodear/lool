@@ -32,7 +32,7 @@ tasks:
   test:
     desc: 🧪 test lool
     cmds:
-      - cargo nextest run
+      - cargo nextest run --all-features
 
   publish:
     desc: 🚀 publish lool

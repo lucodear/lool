@@ -1,7 +1,7 @@
 #[cfg(test)]
 mod parse_instruction {
     use {
-        crate::cli::colors::{
+        crate::cli::stylize::{
             stylizer::instructions::{parse, parse_color_instruction}, style::{Color, StyleAttributes}
         }, eyre::{set_hook, DefaultHandler}
     };
