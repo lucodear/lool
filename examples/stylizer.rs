@@ -17,6 +17,7 @@ fn main() -> Result<()> {
     let red_on_blue = stylize("[white on blue]", "white on blue");
     let rgb = stylize("[#3a95ef]", "#3a95ef");
     let rgb_on_rgb = stylize("[#3a95ef on #c174dd]", "#3a95ef on #c174dd");
+    let rgb_dim = stylize("[#3a95ef+dimmed]", "#3a95ef+dimmed");
 
     println!("pre {} post", red_bold);
     println!("pre {} post", alt_red_bold);
@@ -26,6 +27,7 @@ fn main() -> Result<()> {
     println!("pre {} post", red_on_blue);
     println!("pre {} post", rgb);
     println!("pre {} post", rgb_on_rgb);
+    println!("pre {} post", rgb_dim);
 
     println!("pre {} post", "[green]".stl("green").stl("+bold"));
     println!("pre {} post", "[green+bold]".stl("green+bold"));
@@ -33,6 +35,9 @@ fn main() -> Result<()> {
     println!("pre {} post", "[.blue()]".blue());
     println!("pre {} post", "[.blue().bold()]".blue().bold());
     println!("pre {} post", "[.blue().on_red().bold()]".blue().on_red().bold());
+
+    println!("pre {} post", "[.dim()]".dim());
+    println!("pre {} post", "[.blue().dim()]".blue().dim());
 
     Ok(())
 }
