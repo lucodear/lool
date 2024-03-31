@@ -126,7 +126,7 @@ pub trait Stylize {
     fn on_bright_white(&self) -> String { self.stl("on bright-white") }
     fn on_rgb(&self, r: u8, g: u8, b: u8) -> String { self.stl(&format!("on #{:02X}{:02X}{:02X}", r, g, b)) }
     fn bold(&self) -> String { self.stl("+bold") }
-    fn dim(&self) -> String { self.stl("+dimmed") }
+    fn dim(&self) -> String { self.stl("+dim") }
     fn italic(&self) -> String { self.stl("+italic") }
     fn underline(&self) -> String { self.stl("+underline") }
     fn blink(&self) -> String { self.stl("+blink") }

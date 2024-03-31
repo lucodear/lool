@@ -17,7 +17,7 @@ fn main() -> Result<()> {
     let red_on_blue = stylize("[white on blue]", "white on blue");
     let rgb = stylize("[#3a95ef]", "#3a95ef");
     let rgb_on_rgb = stylize("[#3a95ef on #c174dd]", "#3a95ef on #c174dd");
-    let rgb_dim = stylize("[#3a95ef+dimmed]", "#3a95ef+dimmed");
+    let rgb_dim = stylize("[#3a95ef+dim]", "#3a95ef+dim");
 
     println!("pre {} post", red_bold);
     println!("pre {} post", alt_red_bold);

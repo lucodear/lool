@@ -106,7 +106,7 @@ bitflags! {
     #[derive(Clone, PartialEq, Eq, Debug)]
     pub struct StyleAttributes: u8 {
         const BOLD          = 0b00000001;
-        const DIMMED        = 0b00000010;
+        const DIM           = 0b00000010;
         const ITALIC        = 0b00000100;
         const UNDERLINE     = 0b00001000;
         const BLINK         = 0b00010000;
@@ -122,7 +122,7 @@ impl StyleAttributes {
         if self.contains(StyleAttributes::BOLD) {
             v.push("1");
         }
-        if self.contains(StyleAttributes::DIMMED) {
+        if self.contains(StyleAttributes::DIM) {
             v.push("2");
         }
         if self.contains(StyleAttributes::ITALIC) {
