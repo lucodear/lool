@@ -1,10 +1,10 @@
-use {log::Level, lool::logger::ConsoleLogger};
+use lool::logger::{debug, error, info, trace, warn, ConsoleLogger, Level};
 
 fn main() {
     ConsoleLogger::default_setup(Level::Trace, "test").unwrap();
-    log::info!("log line");
-    log::warn!("log line");
-    log::error!("log line");
-    log::debug!("log line");
-    log::trace!("log line");
+    info!("log line");
+    warn!("log line");
+    error!("log line");
+    debug!("log line");
+    trace!("log line");
 }

@@ -1,8 +1,8 @@
 pub mod datetime;
 
-use {
-    eyre::{eyre, Result},
-    log::{Level, Metadata, Record},
+use eyre::{eyre, Result};
+pub use log::{
+    debug, error, info, set_max_level, trace, warn, Level, LevelFilter, Log, Metadata, Record,
 };
 
 const RESET: &str = "\x1b[0m";
@@ -48,12 +48,20 @@ impl StyledRecord {
     }
 }
 
+/// 🧉 » simple console logger implementation
+/// --
+///
+/// this is a simple logger implementation (mounted on top of the `log` crate) that logs to stdout
+/// with ANSI colors and datetime stamps.
 pub struct ConsoleLogger<'a> {
     context: &'a str,
     time_fn: fn() -> String,
 }
 
 impl<'a> ConsoleLogger<'a> {
+    /// **🧉 » sets up the logger with the default settings**
+    ///
+    /// sets the logger to use the `datetime::utc_current_time` function to get the current time.
     pub fn default_setup(max_level: Level, context: &'static str) -> Result<()> {
         let logger = Box::new(ConsoleLogger {
             context,
@@ -64,6 +72,12 @@ impl<'a> ConsoleLogger<'a> {
             .map_err(|err| eyre!("failed to set logger: {}", err))
     }
 
+    /// **🧉 » sets up the logger with the given settings**
+    ///
+    /// the `time_fn` parameter should be a function that returns a string representation of the
+    /// current time.
+    ///
+    /// the default `time_fn` is `datetime::utc_current_time` and it doesn't take TZ into account.
     pub fn setup(max_level: Level, context: &'static str, time_fn: fn() -> String) -> Result<()> {
         let logger = Box::new(ConsoleLogger { context, time_fn });
         log::set_logger(Box::leak(logger) as &'static ConsoleLogger)
@@ -71,6 +85,7 @@ impl<'a> ConsoleLogger<'a> {
             .map_err(|err| eyre!("failed to set logger: {}", err))
     }
 
+    /// 🧉 » sets the logger's context
     pub fn set_context(&mut self, context: &'a str) {
         self.context = context;
     }
@@ -82,6 +97,7 @@ impl<'a> log::Log for ConsoleLogger<'a> {
         metadata.level() <= Level::Info
     }
 
+    /// log the record
     fn log(&self, record: &Record) {
         let styled_record = StyledRecord::from(record, self.time_fn);
 

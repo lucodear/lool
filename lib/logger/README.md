@@ -24,7 +24,7 @@ cargo add lool --registry=lugit
 The logger must be initialized before it can be used. The following code snippet shows how to initialize the logger with the default settings:
 
 ```rs
-use {log::Level, lool::logger::ConsoleLogger};
+use lool::logger::{ConsoleLogger, Level};
 
 fn main() {
     ConsoleLogger::default_setup(Level::Trace, "my-app").unwrap();
@@ -42,7 +42,7 @@ The `default_setup` function takes two arguments:
 The logger can be used with the `log` crate. The following code snippet shows how to use the logger:
 
 ```rs
-use log::{info, warn, error, trace, debug};
+use lool::logger::{info, warn, error, debug, trace};
 
 fn main() {
     info!("This is an info message");
@@ -77,7 +77,7 @@ function. The custom function should receive no arguments and return a string wi
 datetime.
 
 ```rs
-use {log::Level, lool::logger::ConsoleLogger};
+use lool::logger::{ConsoleLogger, Level};
 use custom_implementation::custom_datetime_fn;
 
 fn main() {
@@ -88,7 +88,7 @@ fn main() {
 The library also provides a convenient function in case we just don't want to display the datetime:
 
 ```rs
-use {log::Level, lool::logger::{ConsoleLogger, datetime::noop_datetime}};
+use lool::logger::{ConsoleLogger, Level, datetime::noop_datetime};
 
 fn main() {
     ConsoleLogger::custom_setup(Level::Trace, "my-app", noop_datetime).unwrap();
