@@ -27,7 +27,7 @@ tasks:
   lint:
     desc: 🧶 lint lool
     cmds:
-      - cargo clippy --fix
+      - cargo clippy --fix --all-features
 
   test:
     desc: 🧪 test lool

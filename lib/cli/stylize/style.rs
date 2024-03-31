@@ -86,7 +86,7 @@ impl Color {
             "bright-magenta" => Some(Color::BrightMagenta),
             "bright-cyan" => Some(Color::BrightCyan),
             "bright-white" => Some(Color::BrightWhite),
-            s if s.starts_with("#") => {
+            s if s.starts_with('#') => {
                 let s = &s[1..];
                 let r = u8::from_str_radix(&s[0..2], 16).context("Error parsing RGB color")?;
                 let g = u8::from_str_radix(&s[2..4], 16).context("Error parsing RGB color")?;

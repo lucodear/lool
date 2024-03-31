@@ -29,7 +29,7 @@ pub mod instructions {
     pub fn parse(instructions: &str) -> Result<StyledString> {
         let mut styled_string = StyledString::default();
 
-        if instructions.starts_with("+") {
+        if instructions.starts_with('+') {
             // only attributes
             styled_string.attrs = attributes_from_str(instructions.trim_start_matches('+'))
                 .map_err(|e| eyre::eyre!(e))?;
