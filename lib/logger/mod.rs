@@ -1,7 +1,9 @@
 pub mod datetime;
 
-use eyre::{eyre, Result};
-use log::{Level, Metadata, Record};
+use {
+    eyre::{eyre, Result},
+    log::{Level, Metadata, Record},
+};
 
 const RESET: &str = "\x1b[0m";
 
@@ -17,8 +19,8 @@ impl StyledRecord {
     fn from(record: &Record, get_time: fn() -> String) -> Self {
         let ansi_style_level = match record.level() {
             Level::Error => "\x1b[31m", // red
-            Level::Warn => "\x1b[33m", // yellow
-            Level::Info => "\x1b[32m", // green
+            Level::Warn => "\x1b[33m",  // yellow
+            Level::Info => "\x1b[32m",  // green
             Level::Debug => "\x1b[95m", // magenta
             Level::Trace => "\x1b[34m", // blue
         };
@@ -34,28 +36,36 @@ impl StyledRecord {
         Self {
             level: format!("{}{:<5}{}", ansi_style_level, record.level(), RESET),
             message: format!("{}", record.args()),
-            file: format!("{}{}{}", file_ansi_color, record.file().unwrap_or("unknown"), RESET),
+            file: format!(
+                "{}{}{}",
+                file_ansi_color,
+                record.file().unwrap_or("unknown"),
+                RESET
+            ),
             line: format!("{}{}{}", line_ansi_color, record.line().unwrap_or(0), RESET),
             time,
         }
     }
 }
 
-pub struct ConsoleLogger<'a>{
+pub struct ConsoleLogger<'a> {
     context: &'a str,
     time_fn: fn() -> String,
 }
 
 impl<'a> ConsoleLogger<'a> {
     pub fn default_setup(max_level: Level, context: &'static str) -> Result<()> {
-        let logger = Box::new(ConsoleLogger { context, time_fn: datetime::utc_current_time});
+        let logger = Box::new(ConsoleLogger {
+            context,
+            time_fn: datetime::utc_current_time,
+        });
         log::set_logger(Box::leak(logger) as &'static ConsoleLogger)
             .map(|()| log::set_max_level(max_level.to_level_filter()))
             .map_err(|err| eyre!("failed to set logger: {}", err))
     }
 
     pub fn setup(max_level: Level, context: &'static str, time_fn: fn() -> String) -> Result<()> {
-        let logger = Box::new(ConsoleLogger { context, time_fn});
+        let logger = Box::new(ConsoleLogger { context, time_fn });
         log::set_logger(Box::leak(logger) as &'static ConsoleLogger)
             .map(|()| log::set_max_level(max_level.to_level_filter()))
             .map_err(|err| eyre!("failed to set logger: {}", err))

@@ -1,6 +1,4 @@
-use bitflags::bitflags;
-use eyre::Context;
-use std::borrow::Cow;
+use {bitflags::bitflags, eyre::Context, std::borrow::Cow};
 
 /// The 8 standard colors.
 #[derive(Clone, Copy, Debug, PartialEq, Eq)]

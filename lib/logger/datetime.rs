@@ -33,7 +33,15 @@ pub fn utc_current_time() -> String {
             let minutes = (secs / 60) % 60;
             let seconds = secs % 60;
 
-            format!("{:04}-{:02}-{:02} {:02}:{:02}:{:02}", years, month + 1, day, hours, minutes, seconds)
+            format!(
+                "{:04}-{:02}-{:02} {:02}:{:02}:{:02}",
+                years,
+                month + 1,
+                day,
+                hours,
+                minutes,
+                seconds
+            )
         }
         Err(_) => "0".to_string(),
     }
@@ -57,4 +65,3 @@ fn days_to_date(days: u64, leap: bool) -> (u64, u64) {
 
     (month, days_left + 1) // Adding 1 to day to make it 1-based
 }
-

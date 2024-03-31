@@ -1,10 +1,14 @@
-use super::style::{Color, StyleAttributes as StyleBitflags};
-use eyre::Result;
+use {
+    super::style::{Color, StyleAttributes as StyleBitflags},
+    eyre::Result,
+};
 
 pub mod instructions {
-    use super::{Result, StyleBitflags, Color};
-    use bitflags::parser::{from_str, ParseError};
-    
+    use {
+        super::{Color, Result, StyleBitflags},
+        bitflags::parser::{from_str, ParseError},
+    };
+
     pub struct StyledString {
         pub fg: Option<Color>,
         pub bg: Option<Color>,
@@ -27,8 +31,9 @@ pub mod instructions {
 
         if instructions.starts_with("+") {
             // only attributes
-            styled_string.attrs = attributes_from_str(instructions.trim_start_matches('+')).map_err(|e| eyre::eyre!(e))?;
-            return Ok(styled_string);    
+            styled_string.attrs = attributes_from_str(instructions.trim_start_matches('+'))
+                .map_err(|e| eyre::eyre!(e))?;
+            return Ok(styled_string);
         }
 
         // try to separate the colors from the attributes
@@ -71,20 +76,23 @@ pub mod instructions {
             }
             2 => {
                 // Both fg and bg colors are provided
-                Ok((Some(Color::from_str(colors[0])?), Some(Color::from_str(colors[1])?)))
+                Ok((
+                    Some(Color::from_str(colors[0])?),
+                    Some(Color::from_str(colors[1])?),
+                ))
             }
             _ => Err(eyre::eyre!("Invalid color instruction: {}", instruction)),
         }
     }
 
-    fn attributes_from_str (s: &str) -> Result<StyleBitflags, ParseError> {
-        from_str(s.to_uppercase().as_str())    
+    fn attributes_from_str(s: &str) -> Result<StyleBitflags, ParseError> {
+        from_str(s.to_uppercase().as_str())
     }
 }
 
 /// 🧉 » Stylize Trait
 /// --
-/// 
+///
 /// `Trait` that extends `String` and `str` with the ability to stylize them
 /// with ANSI color and attrs, using methods that return a new string with the given style.
 pub trait Stylize {
@@ -149,9 +157,9 @@ impl Stylize for String {
 
 /// 🧉 » stylize fn
 /// --
-/// 
+///
 /// Stylizes a string with optional ANSI color and attributes.
-/// 
+///
 pub fn stylize<S: AsRef<str>>(s: S, instructions: &str) -> String {
     let styled_string = instructions::parse(instructions);
 
