@@ -95,6 +95,7 @@ pub mod instructions {
 ///
 /// `Trait` that extends `String` and `str` with the ability to stylize them
 /// with ANSI color and attrs, using methods that return a new string with the given style.
+#[rustfmt::skip]
 pub trait Stylize {
     /// Basic styling method, receives a styling instruction
     /// see the `stylize` function for more information
@@ -141,7 +142,7 @@ pub trait Stylize {
     fn reverse(&self) -> String { self.stl("+reverse") }
     fn hidden(&self) -> String { self.stl("+hidden") }
     fn strikethrough(&self) -> String { self.stl("+strikethrough") }
-} 
+}
 
 impl Stylize for str {
     fn stl(&self, instruction: &str) -> String {
