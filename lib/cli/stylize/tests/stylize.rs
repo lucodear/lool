@@ -19,7 +19,7 @@ mod parse_instruction {
         assert_eq!(parse_color_instruction("red")?, (Some(Color::Red), None));
         assert_eq!(
             parse_color_instruction("#FF0000")?,
-            (Some(Color::TrueColor { r: 255, g: 0, b: 0 }), None)
+            (Some(Color::Rgb { r: 255, g: 0, b: 0 }), None)
         );
         assert_eq!(
             parse_color_instruction("on blue")?,
@@ -27,7 +27,7 @@ mod parse_instruction {
         );
         assert_eq!(
             parse_color_instruction("on #0000FF")?,
-            (None, Some(Color::TrueColor { r: 0, g: 0, b: 255 }))
+            (None, Some(Color::Rgb { r: 0, g: 0, b: 255 }))
         );
         assert_eq!(
             parse_color_instruction("red on blue")?,
@@ -36,8 +36,8 @@ mod parse_instruction {
         assert_eq!(
             parse_color_instruction("#FF0000 on #0000FF")?,
             (
-                Some(Color::TrueColor { r: 255, g: 0, b: 0 }),
-                Some(Color::TrueColor { r: 0, g: 0, b: 255 })
+                Some(Color::Rgb { r: 255, g: 0, b: 0 }),
+                Some(Color::Rgb { r: 0, g: 0, b: 255 })
             )
         );
         assert!(parse_color_instruction("red on blue on green").is_err());
@@ -72,14 +72,8 @@ mod parse_instruction {
 
         // ##RRGGBB
         let styled_string = parse("#FF0000 on #0000FF")?;
-        assert_eq!(
-            styled_string.fg,
-            Some(Color::TrueColor { r: 255, g: 0, b: 0 })
-        );
-        assert_eq!(
-            styled_string.bg,
-            Some(Color::TrueColor { r: 0, g: 0, b: 255 })
-        );
+        assert_eq!(styled_string.fg, Some(Color::Rgb { r: 255, g: 0, b: 0 }));
+        assert_eq!(styled_string.bg, Some(Color::Rgb { r: 0, g: 0, b: 255 }));
         assert_eq!(styled_string.attrs, StyleAttributes::empty());
 
         let styled_string = parse("red on blue+bold")?;
@@ -89,14 +83,8 @@ mod parse_instruction {
 
         // ##RRGGBB
         let styled_string = parse("#FF0000 on #0000FF+bold")?;
-        assert_eq!(
-            styled_string.fg,
-            Some(Color::TrueColor { r: 255, g: 0, b: 0 })
-        );
-        assert_eq!(
-            styled_string.bg,
-            Some(Color::TrueColor { r: 0, g: 0, b: 255 })
-        );
+        assert_eq!(styled_string.fg, Some(Color::Rgb { r: 255, g: 0, b: 0 }));
+        assert_eq!(styled_string.bg, Some(Color::Rgb { r: 0, g: 0, b: 255 }));
         assert_eq!(styled_string.attrs, StyleAttributes::BOLD);
 
         let styled_string = parse("red on blue+bold|underline")?;
@@ -109,10 +97,7 @@ mod parse_instruction {
 
         let styled_string = parse("red on #0000FF+bold|underline|italic")?;
         assert_eq!(styled_string.fg, Some(Color::Red));
-        assert_eq!(
-            styled_string.bg,
-            Some(Color::TrueColor { r: 0, g: 0, b: 255 })
-        );
+        assert_eq!(styled_string.bg, Some(Color::Rgb { r: 0, g: 0, b: 255 }));
         assert_eq!(
             styled_string.attrs,
             StyleAttributes::BOLD | StyleAttributes::UNDERLINE | StyleAttributes::ITALIC

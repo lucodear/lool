@@ -1,1 +1,1 @@
-mod stylizo;
+mod stylize;

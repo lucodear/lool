@@ -47,5 +47,17 @@ fn main() -> Result<()> {
     println!("pre {} post", "[.dim()]".dim());
     println!("pre {} post", "[.blue().dim()]".blue().dim());
 
+    println!("pre {} post", "[.rgb(\"#af7cbf\")]".rgb("#af7cbf"));
+    println!(
+        "pre {} post",
+        "[.rgb(\"#af7cbf\").bold()]".rgb("#af7cbf").bold()
+    );
+
+    println!("pre {} post", "[.on_rgb(\"#af7cbf\")".on_rgb("#af7cbf"));
+    println!(
+        "pre {} post",
+        "[.on_rgb(\"#af7cbf\").bold()]".on_rgb("#af7cbf").bold()
+    );
+
     Ok(())
 }

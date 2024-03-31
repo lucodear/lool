@@ -1,6 +1,6 @@
 use {bitflags::bitflags, eyre::Context, std::borrow::Cow};
 
-/// The 8 standard colors.
+/// Standard terminal colors + RGB
 #[derive(Clone, Copy, Debug, PartialEq, Eq)]
 pub enum Color {
     Black,
@@ -19,12 +19,13 @@ pub enum Color {
     BrightMagenta,
     BrightCyan,
     BrightWhite,
-    TrueColor { r: u8, g: u8, b: u8 },
+    Rgb { r: u8, g: u8, b: u8 },
 }
 
 impl Color {
-    pub fn to_fg_str(&self) -> Cow<'static, str> {
-        match *self {
+    /// converts a color to a string that can be used in an ANSI foreground escape sequence
+    pub fn to_fg_str(self) -> Cow<'static, str> {
+        match self {
             Color::Black => "30".into(),
             Color::Red => "31".into(),
             Color::Green => "32".into(),
@@ -41,12 +42,13 @@ impl Color {
             Color::BrightMagenta => "95".into(),
             Color::BrightCyan => "96".into(),
             Color::BrightWhite => "97".into(),
-            Color::TrueColor { r, g, b } => format!("38;2;{};{};{}", r, g, b).into(),
+            Color::Rgb { r, g, b } => format!("38;2;{};{};{}", r, g, b).into(),
         }
     }
 
-    pub fn to_bg_str(&self) -> Cow<'static, str> {
-        match *self {
+    /// converts a color to a string that can be used in an ANSI background escape sequence
+    pub fn to_bg_str(self) -> Cow<'static, str> {
+        match self {
             Color::Black => "40".into(),
             Color::Red => "41".into(),
             Color::Green => "42".into(),
@@ -63,10 +65,11 @@ impl Color {
             Color::BrightMagenta => "105".into(),
             Color::BrightCyan => "106".into(),
             Color::BrightWhite => "107".into(),
-            Color::TrueColor { r, g, b } => format!("48;2;{};{};{}", r, g, b).into(),
+            Color::Rgb { r, g, b } => format!("48;2;{};{};{}", r, g, b).into(),
         }
     }
 
+    /// creates a `Color` from a string
     pub fn from_str(s: &str) -> eyre::Result<Color> {
         let color = match s {
             "" => None,
@@ -91,7 +94,7 @@ impl Color {
                 let r = u8::from_str_radix(&s[0..2], 16).context("Error parsing RGB color")?;
                 let g = u8::from_str_radix(&s[2..4], 16).context("Error parsing RGB color")?;
                 let b = u8::from_str_radix(&s[4..6], 16).context("Error parsing RGB color")?;
-                Some(Color::TrueColor { r, g, b })
+                Some(Color::Rgb { r, g, b })
             }
             _ => None,
         };
@@ -102,6 +105,7 @@ impl Color {
 
 bitflags! {
     #[derive(Clone, PartialEq, Eq, Debug)]
+    /// style attributes bitflags
     pub struct StyleAttributes: u8 {
         const BOLD          = 0b00000001;
         const DIM           = 0b00000010;
@@ -115,6 +119,7 @@ bitflags! {
 }
 
 impl StyleAttributes {
+    /// converts the style attributes to ANSI codes
     pub fn to_ansi_codes(&self) -> Vec<&'static str> {
         let mut v = Vec::new();
         if self.contains(StyleAttributes::BOLD) {
