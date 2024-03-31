@@ -14,4 +14,4 @@
 # Features
 
 - [x] [cli/stylize](lib/cli/stylize)
-- [ ] [logging](lib/logging)
+- [x] [logging](lib/logger)
