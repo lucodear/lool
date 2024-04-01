@@ -242,7 +242,7 @@ pub fn stylize<S: AsRef<str>>(s: S, instructions: &str) -> String {
 /// --
 ///
 /// Stylizes a string with optional ANSI color and attributes.
-/// 
+///
 /// This is an alias for the `stylize` function.
 pub fn stl<S: AsRef<str>>(s: S, instructions: &str) -> String {
     stylize(s, instructions)

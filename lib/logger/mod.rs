@@ -39,7 +39,7 @@ impl StyledRecord {
             file: format!(
                 "{}{}{}",
                 file_ansi_color,
-                record.file().unwrap_or("unknown").replace("\\", "/"),
+                record.file().unwrap_or("unknown").replace('\\', "/"),
                 RESET
             ),
             line: format!("{}{}{}", line_ansi_color, record.line().unwrap_or(0), RESET),
