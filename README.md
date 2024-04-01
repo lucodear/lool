@@ -15,3 +15,4 @@
 
 - [x] [cli/stylize](lib/cli/stylize)
 - [x] [logging](lib/logger)
+- [x] [macros](lib/macros)

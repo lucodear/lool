@@ -16,7 +16,7 @@
 This crate is for internal use. It's only published privately. 
 
 ```bash
-cargo add lool --registry=lugit
+cargo add lool --registry=lugit --features loggers
 ```
 
 # Setup
