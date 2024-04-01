@@ -1,7 +1,7 @@
 mod style;
 mod stylizer;
 
-pub use stylizer::{stylize, Stylize};
+pub use stylizer::{stylize, stl, Stylize};
 
 #[cfg(test)]
 mod tests;
