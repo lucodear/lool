@@ -54,25 +54,25 @@ impl<Tz: TimeZone> LoolDate<Tz> {
 
     /// adds `1` day to the current date
     pub fn add_day(&mut self) {
-        self.date = self.date.clone() + Duration::days(1);
+        self.date += Duration::days(1);
         self.set_start_of(TimeUnit::Day);
     }
 
     /// adds `1` hour to the current date
     pub fn add_hour(&mut self) {
-        self.date = self.date.clone() + Duration::hours(1);
+        self.date += Duration::hours(1);
         self.set_start_of(TimeUnit::Hour);
     }
 
     /// adds `1` minute to the current date
     pub fn add_minute(&mut self) {
-        self.date = self.date.clone() + Duration::minutes(1);
+        self.date += Duration::minutes(1);
         self.set_start_of(TimeUnit::Minute);
     }
 
     /// adds `1` second to the current date
     pub fn add_second(&mut self) {
-        self.date = self.date.clone() + Duration::seconds(1);
+        self.date += Duration::seconds(1);
         self.set_start_of(TimeUnit::Second);
     }
 
@@ -88,22 +88,22 @@ impl<Tz: TimeZone> LoolDate<Tz> {
 
     /// subtracts `1` day from the current date
     pub fn subs_day(&mut self) {
-        self.date = self.date.clone() - Duration::days(1);
+        self.date -= Duration::days(1);
     }
 
     /// subtracts `1` hour from the current date
     pub fn subs_hour(&mut self) {
-        self.date = self.date.clone() - Duration::hours(1);
+        self.date -= Duration::hours(1);
     }
 
     /// subtracts `1` minute from the current date
     pub fn subs_minute(&mut self) {
-        self.date = self.date.clone() - Duration::minutes(1);
+        self.date -= Duration::minutes(1);
     }
 
     /// subtracts `1` second from the current date
     pub fn subs_second(&mut self) {
-        self.date = self.date.clone() - Duration::seconds(1);
+        self.date -= Duration::seconds(1);
     }
 
     /// returns the day of the month starting from `1`
@@ -152,7 +152,7 @@ impl<Tz: TimeZone> LoolDate<Tz> {
     }
 
     /// returns the number of milliseconds since the last second boundary
-    /// 
+    ///
     /// In event of a [leap second](https://en.wikipedia.org/wiki/Leap_second) this may exceed
     /// `999`.
     pub fn millis(&self) -> u64 {
@@ -160,7 +160,7 @@ impl<Tz: TimeZone> LoolDate<Tz> {
     }
 
     /// Returns the number of microseconds since the last second boundary.
-    /// 
+    ///
     /// In event of a [leap second](https://en.wikipedia.org/wiki/Leap_second) this may exceed
     /// `999999`.
     pub fn micros(&self) -> u32 {
@@ -168,7 +168,7 @@ impl<Tz: TimeZone> LoolDate<Tz> {
     }
 
     /// Returns the number of nanoseconds since the last second boundary.
-    /// 
+    ///
     /// In event of a [leap second](https://en.wikipedia.org/wiki/Leap_second) this may exceed
     /// `999999999`.
     pub fn nanos(&self) -> u32 {
@@ -176,25 +176,33 @@ impl<Tz: TimeZone> LoolDate<Tz> {
     }
 
     /// sets the nanoseconds since the last second change
-    /// 
+    ///
     /// values greater than `2000,000,000` will be clamped to `1999,999,999`
     pub fn set_nanos(&mut self, nanos: u32) {
         // avoid `whith_nanosecond` returning None for > 2_000_000_000 values
         // so we can safely unwrap the result
-        let nanos = if nanos > 2_000_000_000 { 1_999_999_999 } else { nanos };
+        let nanos = if nanos > 2_000_000_000 {
+            1_999_999_999
+        } else {
+            nanos
+        };
         self.date = self.date.with_nanosecond(nanos).unwrap();
     }
 
     /// sets the microseconds since the last second change
-    /// 
+    ///
     /// values greater than `2,000,000` will be clamped to `1,999,999`
     pub fn set_micros(&mut self, micros: u32) {
-        let micros = if micros > 2_000_000 { 1_999_999 } else { micros };
-        self.date = self.date.with_nanosecond(micros as u32 * 1_000).unwrap();
+        let micros = if micros > 2_000_000 {
+            1_999_999
+        } else {
+            micros
+        };
+        self.date = self.date.with_nanosecond(micros * 1_000).unwrap();
     }
 
     /// sets the milliseconds since the last second change
-    /// 
+    ///
     /// values greater than `2,000` will be clamped to `1,999`
     pub fn set_millis(&mut self, millis: u64) {
         let millis = if millis > 2_000 { 1_999 } else { millis };
@@ -202,7 +210,7 @@ impl<Tz: TimeZone> LoolDate<Tz> {
     }
 
     /// sets the second number of the date
-    /// 
+    ///
     /// values >= `60` will be clamped to `0`
     pub fn set_second(&mut self, second: u32) {
         let second = if second >= 60 { 0 } else { second };
@@ -210,7 +218,7 @@ impl<Tz: TimeZone> LoolDate<Tz> {
     }
 
     /// sets the minute number of the date
-    /// 
+    ///
     /// values >= `60` will be clamped to `0`
     pub fn set_minute(&mut self, minute: u32) {
         let minute = if minute >= 60 { 0 } else { minute };
@@ -218,7 +226,7 @@ impl<Tz: TimeZone> LoolDate<Tz> {
     }
 
     /// sets the hour number of the date `(0..23)`
-    /// 
+    ///
     /// values >= `24` will be clamped to `0`
     pub fn set_hour(&mut self, hour: u32) {
         let hour = if hour >= 24 { 0 } else { hour };
@@ -226,11 +234,11 @@ impl<Tz: TimeZone> LoolDate<Tz> {
     }
 
     /// sets the hour, minute and second of the date at once
-    /// 
+    ///
     /// - `hour` must be in the range `(0..23)`
     /// - `minute` must be in the range `(0..59)`
     /// - `second` must be in the range `(0..59)`
-    /// 
+    ///
     /// values greater than the maximum will be clamped (see `set_hour`, `set_minute`, `set_second`)
     /// documentation for more information
     pub fn set_hms(&mut self, hour: u32, minute: u32, second: u32) {
@@ -240,7 +248,7 @@ impl<Tz: TimeZone> LoolDate<Tz> {
     }
 
     /// sets the day of the month `(1..31)`
-    /// 
+    ///
     /// values greater than the maximum day of the month will be clamped to the last day of the
     /// month, depending on the current year and month and taking leap years into account.
     pub fn set_day(&mut self, day: u32) {
@@ -255,10 +263,10 @@ impl<Tz: TimeZone> LoolDate<Tz> {
     }
 
     /// sets the month of the year `(1..12)`
-    /// 
+    ///
     /// - values greater than the maximum month will be clamped to `12`
     /// - values less than `1` will be clamped to `1`
-    /// 
+    ///
     /// if the current day is greater than the last day of the new month, the day will be clamped
     /// to the last day of the month, depending on the current year and month and taking leap years
     /// into account. So, be aware that changing the month may imply a change in the day.
@@ -285,7 +293,7 @@ impl<Tz: TimeZone> LoolDate<Tz> {
     }
 
     /// sets the month and day of the date at once
-    /// 
+    ///
     /// check the `set_month` and `set_day` documentation for more information about the clamping
     /// behavior.
     pub fn set_md(&mut self, month: u32, day: u32) {
@@ -294,12 +302,12 @@ impl<Tz: TimeZone> LoolDate<Tz> {
     }
 
     /// sets the year of the date
-    /// 
-    /// **warning**: changing the year may imply a change in the day. 
+    ///
+    /// **warning**: changing the year may imply a change in the day.
     /// For example, if the current date is `2024-02-29` and you set the year to `2023`, the date
     /// date `2023-02-29` will be invalid, because `2023` is not a leap year. In this case, the day
     /// will be clamped to `2023-02-28`.
-    /// 
+    ///
     /// check the `set_day` documentation for more information about the clamping behavior.
     pub fn set_year(&mut self, year: i32) {
         let month = self.date.month();
@@ -315,7 +323,7 @@ impl<Tz: TimeZone> LoolDate<Tz> {
     }
 
     /// sets the year, month and day of the date at once
-    /// 
+    ///
     /// check the `set_year`, `set_month` and `set_day` documentation for more information about the
     /// clamping behavior.
     pub fn set_ymd(&mut self, year: i32, month: u32, day: u32) {
@@ -347,32 +355,32 @@ impl<Tz: TimeZone> LoolDate<Tz> {
                 self.set_minute(0);
                 self.set_second(0);
                 self.set_nanos(0);
-            },
+            }
             TimeUnit::Month => {
                 self.set_day(1);
                 self.set_hour(0);
                 self.set_minute(0);
                 self.set_second(0);
                 self.set_nanos(0);
-            },
+            }
             TimeUnit::Day => {
                 self.set_hour(0);
                 self.set_minute(0);
                 self.set_second(0);
                 self.set_nanos(0);
-            },
+            }
             TimeUnit::Hour => {
                 self.set_minute(0);
                 self.set_second(0);
                 self.set_nanos(0);
-            },
+            }
             TimeUnit::Minute => {
                 self.set_second(0);
                 self.set_nanos(0);
-            },
+            }
             TimeUnit::Second => {
                 self.set_nanos(0);
-            },
+            }
         };
     }
 }

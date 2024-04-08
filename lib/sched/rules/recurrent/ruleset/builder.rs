@@ -1,11 +1,10 @@
 use chrono::Weekday;
 
-use super::RecurrenceRuleSet;
-use crate::sched::rules::Rule;
+use {super::RecurrenceRuleSet, crate::sched::rules::Rule};
 
 pub fn ruleset() -> RecurrenceRuleSet {
-    let ruleset = RecurrenceRuleSet::recurring();
-    ruleset
+    
+    RecurrenceRuleSet::recurring()
 }
 
 impl RecurrenceRuleSet {

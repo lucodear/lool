@@ -4,12 +4,12 @@ use crate::sched::rules::{range, ruleset};
 
 #[test]
 fn between_10_and_20_seconds() {
-    let date = Local.with_ymd_and_hms(2024, 4, 7, 16, 15, 05).unwrap();
+    let date = Local.with_ymd_and_hms(2024, 4, 7, 16, 15, 5).unwrap();
 
     let mut rules = ruleset();
     rules.seconds_rule(range(10, 20, 1));
 
-    let mut next = date.clone();
+    let mut next = date;
     let initial_minute = date.minute();
 
     for i in 0..20 {
@@ -33,12 +33,12 @@ fn between_10_and_20_seconds() {
 #[test]
 fn each_day_between_9_and_17_at_hour_start() {
     // will start next day because it's already > 17:00:00
-    let date = Local.with_ymd_and_hms(2024, 4, 25, 19, 15, 05).unwrap();
+    let date = Local.with_ymd_and_hms(2024, 4, 25, 19, 15, 5).unwrap();
 
     let mut rules = ruleset();
     rules.hours_rule(range(9, 17, 1)).at_minute(0).at_second(0);
 
-    let mut next = date.clone();
+    let mut next = date;
     let initial_day = date.day() + 1;
 
     for i in 0..18 {

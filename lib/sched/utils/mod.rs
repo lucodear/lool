@@ -10,7 +10,7 @@ const INVALID_OFFSET_MIN_ERR: &str = "invalid timezone offset (minute should be 
 /// 🧉 » converts `hours` and `minutes` durations to total seconds
 ///
 /// e.g. `h=1, m=30` should return `5400`
-/// 
+///
 /// meaning `1 hour and 30 minutes` is `5400` seconds
 pub fn hm_to_s(h: i32, m: i32) -> i32 {
     h * 3600 + m * 60
@@ -48,7 +48,7 @@ pub fn tz_to_s(offset: &str) -> Result<i32> {
         0
     };
 
-    // offset hours cannot be greater than 14, minutes cannot be greater than 59 and 
+    // offset hours cannot be greater than 14, minutes cannot be greater than 59 and
     // seconds cannot be greater than 59
     ensure!(hours <= 14, INVALID_OFFSET_HS_ERR);
     ensure!(minutes <= 59, INVALID_OFFSET_MIN_ERR);
@@ -58,8 +58,10 @@ pub fn tz_to_s(offset: &str) -> Result<i32> {
 
 #[cfg(test)]
 mod tests {
-    use eyre::{set_hook, DefaultHandler};
-    use super::*;
+    use {
+        super::*,
+        eyre::{set_hook, DefaultHandler},
+    };
 
     fn setup_eyre() {
         let _ = set_hook(Box::new(DefaultHandler::default_with));

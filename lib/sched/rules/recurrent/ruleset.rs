@@ -1,5 +1,5 @@
 pub mod builder;
-    
+
 use {
     super::Rule,
     crate::sched::utils::cron_date::LoolDate,
@@ -9,7 +9,7 @@ use {
 /// 🧉 » a recurrence rule-set
 ///
 /// sets rules that define a certain recurrence behavior
-/// 
+///
 /// use the builder pattern to create a new `RecurrenceRuleSet`
 pub struct RecurrenceRuleSet {
     /// second of the minute (0..59)
@@ -37,10 +37,7 @@ impl RecurrenceRuleSet {
     /// 🧉 » returns the next match of the rule set from a given `DateTime`
     pub fn next_match_from(&self, from: DateTime<Local>) -> Option<DateTime<Local>> {
         let next = self._next_match(from);
-        match next {
-            Some(date) => Some(date.date()),
-            None => None,
-        }
+        next.map(|date| date.date())
     }
 
     /// 🚧 internal
@@ -51,12 +48,12 @@ impl RecurrenceRuleSet {
 
         // check year
         if let Some(Rule::Val(year)) = self.year {
-            if year < from.year().into() {
+            if year < from.year() {
                 return None;
             }
         }
 
-        let mut next = LoolDate::new(from.clone());
+        let mut next = LoolDate::new(from);
         next.add_second();
 
         loop {
@@ -125,4 +122,3 @@ impl RecurrenceRuleSet {
         Some(next)
     }
 }
-

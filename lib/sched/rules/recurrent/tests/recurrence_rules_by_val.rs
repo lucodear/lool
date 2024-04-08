@@ -6,12 +6,12 @@ use crate::sched::rules::ruleset;
 fn at_second_1_of_each_minute() {
     // we have passed the second 1 of the minute
     // so it should go to the next minute
-    let date = Local.with_ymd_and_hms(2024, 4, 7, 16, 15, 05).unwrap();
+    let date = Local.with_ymd_and_hms(2024, 4, 7, 16, 15, 5).unwrap();
 
     let mut rules = ruleset();
     rules.at_second(1);
 
-    let mut next = date.clone();
+    let mut next = date;
     let initial_minute = date.minute();
 
     for i in 0..10 {
@@ -20,7 +20,7 @@ fn at_second_1_of_each_minute() {
         // should match 16:16:01, 16:17:01, 16:18:01, ...
         assert_eq!(
             next,
-            Local.with_ymd_and_hms(2024, 4, 7, 16, initial_minute + i + 1, 01).unwrap()
+            Local.with_ymd_and_hms(2024, 4, 7, 16, initial_minute + i + 1, 1).unwrap()
         );
     }
 }
@@ -29,12 +29,12 @@ fn at_second_1_of_each_minute() {
 fn at_hour_1_of_each_day() {
     // we have passed the hour 1 of the day
     // so it should go to the next day
-    let date = Local.with_ymd_and_hms(2024, 4, 25, 16, 15, 05).unwrap();
+    let date = Local.with_ymd_and_hms(2024, 4, 25, 16, 15, 5).unwrap();
 
     let mut rules = ruleset();
     rules.at_time(1, 0, 0);
 
-    let mut next = date.clone();
+    let mut next = date;
     let mut initial_day = date.day() as i32;
     let mut initial_month = date.month();
 
@@ -55,9 +55,9 @@ fn at_hour_1_of_each_day() {
                     2024,
                     initial_month,
                     (initial_day + i + 1) as u32,
-                    01,
-                    00,
-                    00
+                    1,
+                    0,
+                    0
                 )
                 .unwrap()
         );
@@ -68,12 +68,12 @@ fn at_hour_1_of_each_day() {
 fn each_1st_of_month() {
     // we have passed the 1st of the month
     // so it should go to the next month
-    let date = Local.with_ymd_and_hms(2024, 5, 7, 16, 15, 05).unwrap();
+    let date = Local.with_ymd_and_hms(2024, 5, 7, 16, 15, 5).unwrap();
 
     let mut rules = ruleset();
     rules.on_day(1).at_time(0, 0, 0);
 
-    let mut next = date.clone();
+    let mut next = date;
     let mut initial_month = date.month() as i32;
     let mut initial_year = date.year();
 
@@ -90,7 +90,7 @@ fn each_1st_of_month() {
         assert_eq!(
             next,
             Local
-                .with_ymd_and_hms(initial_year, (initial_month + i + 1) as u32, 01, 00, 00, 00)
+                .with_ymd_and_hms(initial_year, (initial_month + i + 1) as u32, 1, 0, 0, 0)
                 .unwrap()
         );
     }
@@ -100,20 +100,20 @@ fn each_1st_of_month() {
 fn each_wednesday() {
     // we have passed the Wednesday
     // so it should go to the next Wednesday
-    let date = Local.with_ymd_and_hms(2024, 4, 7, 16, 15, 05).unwrap();
+    let date = Local.with_ymd_and_hms(2024, 4, 7, 16, 15, 5).unwrap();
     let mut next_wednesday = Local.with_ymd_and_hms(2024, 4, 10, 0, 0, 0).unwrap();
 
     let mut rules = ruleset();
     rules.on_dow(Weekday::Wed).at_time(0, 0, 0);
 
-    let mut next = date.clone();
+    let mut next = date;
 
     for _ in 0..10 {
         next = rules.next_match_from(next).unwrap();
         println!("next: {:?}", next);
 
         assert_eq!(next, next_wednesday);
-        next_wednesday = next_wednesday + chrono::Duration::days(7);
+        next_wednesday += chrono::Duration::days(7);
     }
 }
 
@@ -121,12 +121,12 @@ fn each_wednesday() {
 fn from_31th_may_schedule_first_of_each_june() {
     // we have passed the 31th of May
     // so it should go to the 1st of June
-    let date = Local.with_ymd_and_hms(2024, 5, 31, 16, 15, 05).unwrap();
+    let date = Local.with_ymd_and_hms(2024, 5, 31, 16, 15, 5).unwrap();
 
     let mut rules = ruleset();
     rules.in_month(6).on_day(1).at_time(0, 0, 0);
 
-    let mut next = date.clone();
+    let mut next = date;
 
     let initial_year = date.year();
     let initial_month = date.month();
@@ -138,7 +138,7 @@ fn from_31th_may_schedule_first_of_each_june() {
         // should match 2024-06-01 00:00:00, 2024-07-01 00:00:00, 2024-08-01 00:00:00, ...
         assert_eq!(
             next,
-            Local.with_ymd_and_hms(initial_year + i, initial_month + 1, 01, 00, 00, 00).unwrap()
+            Local.with_ymd_and_hms(initial_year + i, initial_month + 1, 1, 0, 0, 0).unwrap()
         );
     }
 }
@@ -150,7 +150,7 @@ fn from_1st_may_schedule_first_of_each_june() {
     let mut rules = ruleset();
     rules.in_month(6).on_day(1).at_time(0, 0, 0);
 
-    let mut next = date.clone();
+    let mut next = date;
     let initial_year = date.year();
 
     for i in 0..10 {
@@ -159,7 +159,7 @@ fn from_1st_may_schedule_first_of_each_june() {
 
         assert_eq!(
             next,
-            Local.with_ymd_and_hms(initial_year + i + 1, 06, 01, 00, 00, 00).unwrap()
+            Local.with_ymd_and_hms(initial_year + i + 1, 6, 1, 0, 0, 0).unwrap()
         );
     }
 }

@@ -7,3 +7,4 @@ scopes:
   - "cli"
   - "logger"
   - "macros"
+  - "sched"

@@ -1,8 +1,10 @@
 #[cfg(test)]
 mod tests;
 
-mod ruleset;
 mod rule_unit;
+mod ruleset;
 
-pub use ruleset::{RecurrenceRuleSet, builder::ruleset};
-pub use rule_unit::{Rule, val, range, many, ranges};
+pub use {
+    rule_unit::{many, range, ranges, val, Rule},
+    ruleset::{builder::ruleset, RecurrenceRuleSet},
+};

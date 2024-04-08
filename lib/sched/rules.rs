@@ -3,7 +3,7 @@ mod cron;
 #[cfg(feature = "sched-rule-recurrent")]
 mod recurrent;
 #[cfg(feature = "sched-rule-recurrent")]
-pub use self::recurrent::{many, val, range, ranges, ruleset, RecurrenceRuleSet, Rule};
+pub use self::recurrent::{many, range, ranges, ruleset, val, RecurrenceRuleSet, Rule};
 
 use chrono::{DateTime, Local};
 
