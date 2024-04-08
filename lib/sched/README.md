@@ -21,14 +21,22 @@ This library is for internal use. And as such, it's only published privately.
 cargo add lool --registry=lugit --features sched
 ```
 
-# Additional Features
+# Sub-Features
 
-- `sched.tokio`: Enables the `tokio` runtime support.
-- `sched.rule-recurrent`: Enables the "recurrent-rule" style for scheduling tasks.
-- `sched.rule-cron`: Enables the "cron-like" style for scheduling tasks
 
-> [!WARNING] Not implemented warning
-> although the `sched.rule-cron` feature is available, it's not yet implemented.
+### <picture><img alt="has subfeatures" src="../../.github/img/icon-has-submodules.svg" height="12"></picture>&nbsp;&nbsp;sched.tokio
+
+Enables the `tokio` runtime support, replacing the default behaviour, which implies a `std::thread` pool to run the tasks.
+
+### <picture><img alt="has subfeatures" src="../../.github/img/icon-has-submodules.svg" height="12"></picture>&nbsp;&nbsp;sched.rule-recurrent
+
+Enables the "**recurrent-rule**" style for scheduling tasks.
+
+### <picture><img alt="has subfeatures" src="../../.github/img/icon-has-submodules.svg" height="12"></picture>&nbsp;&nbsp;sched.rule-cron
+
+> [!WARNING]
+> 
+> Not yet implemented
 
 ## Planned Features
 

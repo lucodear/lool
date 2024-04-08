@@ -23,7 +23,7 @@ several features and "sub-features".
 - [x] [macros](lib/macros)
 - [x] [sched](lib/sched)&nbsp;&nbsp;<picture><img alt="has subfeatures" src=".github/img/icon-has-submodules.svg" height="12"></picture>
 
-> [!NOTE] Sub-Features
+> [!NOTE]
 > 
 > <picture><img alt="has subfeatures" src=".github/img/icon-has-submodules.svg" height="12"></picture> » Means that the feature has sub-features.
 >
