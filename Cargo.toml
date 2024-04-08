@@ -23,9 +23,21 @@ path = "lib/lib.rs"
 cli-stylize = ["dep:bitflags"]
 logger = ["dep:log"]
 macros = []
+sched = ["dep:chrono"]
+sched-tokio = ["dep:tokio", "tokio?/time", "tokio?/rt"]
+sched-rule-recurrent = []
+sched-rule-cron = []
+
 
 [dependencies]
-bitflags = { version = "2.5.0", optional = true }
-log = { version = "0.4.21", optional = true }
+# default
 eyre = { version = "0.6.12", default-features = false }
+
+# optional
+bitflags = { version = "2.5.0", optional = true }
+chrono = { version = "0.4.37", optional = true }
+log = { version = "0.4.21", optional = true }
+tokio = { version = "1.37.0", optional = true }
+num-traits = "0.2.18"
+
 
