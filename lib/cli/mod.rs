@@ -1,2 +1,2 @@
-#[cfg(feature = "cli-stylize")]
+#[cfg(feature = "cli.stylize")]
 pub mod stylize;

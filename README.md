@@ -13,7 +13,15 @@
 
 # Features
 
-- [x] [cli/stylize](lib/cli/stylize)
+In order to avoid compiling unnecessary code and expensive dependencies, `lool` is split into
+several features and "sub-features".
+
+## Main features
+
+- [x] [cli](lib/cli)
 - [x] [logging](lib/logger)
 - [x] [macros](lib/macros)
-- [x] [tokio/sched](lib/tokio/sched)
+- [x] [sched](lib/sched) <img src=".github/img/icon-has-submodules.svg" height="16">
+
+> [!NOTE] 
+> <img src=".github/img/icon-has-submodules.svg" height="16"> : Means that the feature has sub-features.

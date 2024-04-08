@@ -20,13 +20,18 @@ debug-assertions = false
 path = "lib/lib.rs"
 
 [features]
-cli-stylize = ["dep:bitflags"]
-logger = ["dep:log"]
-macros = []
-sched = ["dep:chrono"]
-sched-tokio = ["dep:tokio", "tokio?/time", "tokio?/rt"]
-sched-rule-recurrent = []
-sched-rule-cron = []
+# cli utilities
+"cli" = []
+"cli.stylize" = ["dep:bitflags"]
+# logging
+"logger" = ["dep:log"]
+# macros
+"macros" = []
+# scheduling
+"sched" = ["dep:chrono"]
+"sched.tokio" = ["dep:tokio", "tokio?/time", "tokio?/rt"]
+"sched.rule-recurrence" = []
+"sched.rule-cron" = []
 
 
 [dependencies]

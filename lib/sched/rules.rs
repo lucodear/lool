@@ -1,8 +1,8 @@
-#[cfg(feature = "sched-rule-cron")]
+#[cfg(feature = "sched.rule-cron")]
 mod cron;
-#[cfg(feature = "sched-rule-recurrent")]
+#[cfg(feature = "sched.rule-recurrence")]
 mod recurrent;
-#[cfg(feature = "sched-rule-recurrent")]
+#[cfg(feature = "sched.rule-recurrence")]
 pub use self::recurrent::{many, range, ranges, ruleset, val, RecurrenceRuleSet, Rule};
 
 use chrono::{DateTime, Local};
@@ -18,11 +18,11 @@ pub enum SchedulingRule {
     Once(chrono::DateTime<Local>),
 
     /// 🧉 » a scheduling rule expressed with a `RecurrenceRule` structure
-    #[cfg(feature = "sched-rule-recurrent")]
+    #[cfg(feature = "sched.rule-recurrence")]
     Repeat(RecurrenceRuleSet),
 
     /// 🧉 » a scheduling rule expressed in cron format
-    #[cfg(feature = "sched-rule-cron")]
+    #[cfg(feature = "sched.rule-cron")]
     Cron(String),
 }
 
@@ -33,17 +33,22 @@ impl SchedulingRule {
     }
 
     /// 🧉 » get the next execution time from now
-    pub fn next_from(&self, _date: DateTime<Local>) -> Option<DateTime<Local>> {
+    pub fn next_from(&self, date: DateTime<Local>) -> Option<DateTime<Local>> {
         match self {
-            SchedulingRule::Once(_dt) => {
-                unimplemented!()
+            SchedulingRule::Once(date) => {
+                if date > &date {
+                    Some(*date)
+                } else {
+                    None
+                }
             }
-            #[cfg(feature = "sched-rule-recurrent")]
-            SchedulingRule::Repeat(_rule) => {
-                unimplemented!()
-            }
-            #[cfg(feature = "sched-rule-cron")]
+
+            #[cfg(feature = "sched.rule-recurrence")]
+            SchedulingRule::Repeat(rule) => rule.next_match_from(date),
+
+            #[cfg(feature = "sched.rule-cron")]
             SchedulingRule::Cron(_cron) => {
+                // TODO: implement cron scheduling rule
                 unimplemented!()
             }
         }

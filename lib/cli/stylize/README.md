@@ -4,7 +4,7 @@
 <br>
 <br>
 
-<p align="center"><b>lool » <code>cli/stylize</code></b> is a set of utilities for colorizing console outputs.
+<p align="center"><b>lool » <code>cli.stylize</code></b> is a set of utilities for colorizing console outputs.
 </p>
 
 <br>
@@ -16,7 +16,7 @@
 This crate is for internal use. It's only published privately. 
 
 ```bash
-cargo add lool --registry=lugit --features cli-stylize
+cargo add lool --registry=lugit --features cli cli.stylize
 ```
 
 # Usage
