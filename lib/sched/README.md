@@ -24,15 +24,15 @@ cargo add lool --registry=lugit --features sched
 # Sub-Features
 
 
-### <picture><img alt="has subfeatures" src="../../.github/img/icon-has-submodules.svg" height="12"></picture>&nbsp;&nbsp;sched.tokio
+### <a><img alt="has subfeatures" src="../../.github/img/icon-has-submodules.svg" height="12"></a>&nbsp;&nbsp;sched.tokio
 
 Enables the `tokio` runtime support, replacing the default behaviour, which implies a `std::thread` pool to run the tasks.
 
-### <picture><img alt="has subfeatures" src="../../.github/img/icon-has-submodules.svg" height="12"></picture>&nbsp;&nbsp;sched.rule-recurrent
+### <a><img alt="has subfeatures" src="../../.github/img/icon-has-submodules.svg" height="12"></a>&nbsp;&nbsp;sched.rule-recurrent
 
 Enables the "**recurrent-rule**" style for scheduling tasks.
 
-### <picture><img alt="has subfeatures" src="../../.github/img/icon-has-submodules.svg" height="12"></picture>&nbsp;&nbsp;sched.rule-cron
+### <a><img alt="has subfeatures" src="../../.github/img/icon-has-submodules.svg" height="12"></a>&nbsp;&nbsp;sched.rule-cron
 
 > [!WARNING]
 > 
