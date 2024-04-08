@@ -18,10 +18,13 @@ several features and "sub-features".
 
 ## Main features
 
-- [x] [cli](lib/cli)
+- [x] [cli](lib/cli)&nbsp;&nbsp;<picture><img alt="has subfeatures" src=".github/img/icon-has-submodules.svg" height="12"></picture>
 - [x] [logging](lib/logger)
 - [x] [macros](lib/macros)
-- [x] [sched](lib/sched) <img src=".github/img/icon-has-submodules.svg" height="16">
+- [x] [sched](lib/sched)&nbsp;&nbsp;<picture><img alt="has subfeatures" src=".github/img/icon-has-submodules.svg" height="12"></picture>
 
-> [!NOTE] 
-> <img src=".github/img/icon-has-submodules.svg" height="16"> : Means that the feature has sub-features.
+> [!NOTE] Sub-Features
+> 
+> <picture><img alt="has subfeatures" src=".github/img/icon-has-submodules.svg" height="12"></picture> » Means that the feature has sub-features.
+>
+> Check the module's specific documentation for more information.
