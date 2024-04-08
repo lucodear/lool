@@ -3,7 +3,6 @@ use chrono::Weekday;
 use {super::RecurrenceRuleSet, crate::sched::rules::Rule};
 
 pub fn ruleset() -> RecurrenceRuleSet {
-    
     RecurrenceRuleSet::recurring()
 }
 

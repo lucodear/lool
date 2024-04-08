@@ -51,14 +51,7 @@ fn at_hour_1_of_each_day() {
         assert_eq!(
             next,
             Local
-                .with_ymd_and_hms(
-                    2024,
-                    initial_month,
-                    (initial_day + i + 1) as u32,
-                    1,
-                    0,
-                    0
-                )
+                .with_ymd_and_hms(2024, initial_month, (initial_day + i + 1) as u32, 1, 0, 0)
                 .unwrap()
         );
     }
