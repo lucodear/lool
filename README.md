@@ -22,6 +22,7 @@ several features and "sub-features".
 - [x] [logging](lib/logger)
 - [x] [macros](lib/macros)
 - [x] [sched](lib/sched)&nbsp;&nbsp;<picture><img alt="has subfeatures" src=".github/img/icon-has-submodules.svg" height="12"></picture>
+- [x] [utils](lib/utils)&nbsp;&nbsp;<picture><img alt="has subfeatures" src=".github/img/icon-has-submodules.svg" height="12"></picture>
 
 > [!NOTE]
 > 
