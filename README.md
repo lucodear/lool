@@ -18,14 +18,14 @@ several features and "sub-features".
 
 ## Main features
 
-- [x] [cli](lib/cli)&nbsp;&nbsp;<picture><img alt="has subfeatures" src=".github/img/icon-has-submodules.svg" height="12"></picture>
+- [x] [cli](lib/cli)&nbsp;&nbsp;<a href="#"><img alt="has subfeatures" src=".github/img/icon-has-submodules.svg" height="12"></a>
 - [x] [logging](lib/logger)
 - [x] [macros](lib/macros)
-- [x] [sched](lib/sched)&nbsp;&nbsp;<picture><img alt="has subfeatures" src=".github/img/icon-has-submodules.svg" height="12"></picture>
-- [x] [utils](lib/utils)&nbsp;&nbsp;<picture><img alt="has subfeatures" src=".github/img/icon-has-submodules.svg" height="12"></picture>
+- [x] [sched](lib/sched)&nbsp;&nbsp;<a href="#"><img alt="has subfeatures" src=".github/img/icon-has-submodules.svg" height="12"></a>
+- [x] [utils](lib/utils)&nbsp;&nbsp;<a href="#"><img alt="has subfeatures" src=".github/img/icon-has-submodules.svg" height="12"></a>
 
 > [!NOTE]
 > 
-> <picture><img alt="has subfeatures" src=".github/img/icon-has-submodules.svg" height="12"></picture> » Means that the feature has sub-features.
+> <a href="#"><img alt="has subfeatures" src=".github/img/icon-has-submodules.svg" height="12"></a> » Means that the feature has sub-features.
 >
 > Check the module's specific documentation for more information.
