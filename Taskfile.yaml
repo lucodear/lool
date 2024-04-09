@@ -19,6 +19,16 @@ tasks:
       - cargo build --release
       - python check_size.py
 
+  example:logger:
+    desc: 🚀 run lool «example logger»
+    cmds:
+      - cargo run --example=logger --release --features logger
+  
+  example:threadpool:
+    desc: 🚀 run lool «example threadpool»
+    cmds:
+      - cargo run --example=threadpool --release --features utils.threads
+
   fmt:
     desc: 🎨 format lool
     cmds:

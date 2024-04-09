@@ -9,3 +9,6 @@ pub mod logger;
 
 #[cfg(feature = "macros")]
 pub mod macros;
+
+#[cfg(feature = "utils")]
+pub mod utils;

@@ -1,4 +1,4 @@
-<p align="center"><img src="../../../.github/img/logo-cli-colors.svg" height="256"></p>
+<p align="center"><img src="../../../.github/img/logo-cli-colors.svg" width="200"></p>
 
 <br>
 <br>

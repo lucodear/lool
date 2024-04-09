@@ -1,4 +1,4 @@
-<p align="center"><img src="./../../.github/img/logo-cli.svg" height="192"></p>
+<p align="center"><img src="./../../.github/img/logo-cli.svg" width="200"></p>
 
 <br>
 <br>
@@ -16,7 +16,7 @@
 This crate is for internal use. It's only published privately. 
 
 ```bash
-cargo add lool --registry=lugit --features cli
+cargo add lool --registry=lugit --features cli {sub-feature}
 ```
 
 # Sub-Features

@@ -29,9 +29,12 @@ path = "lib/lib.rs"
 "macros" = []
 # scheduling
 "sched" = ["dep:chrono"]
-"sched.tokio" = ["dep:tokio", "tokio?/time", "tokio?/rt"]
-"sched.rule-recurrence" = []
-"sched.rule-cron" = []
+"sched.tokio" = ["dep:tokio", "tokio?/time", "tokio?/rt", "sched"]
+"sched.rule-recurrence" = ["sched"]
+"sched.rule-cron" = ["sched"]
+# utils
+"utils" = []
+"utils.threads" = ["macros", "utils", "dep:log"]
 
 
 [dependencies]

@@ -1,4 +1,4 @@
-<p align="center"><img src="../../.github/img/logo-tokio-sched.svg" height="256"></p>
+<p align="center"><img src="../../.github/img/logo-sched.svg" width="200"></p>
 
 <br>
 <br>
@@ -18,7 +18,7 @@
 This library is for internal use. And as such, it's only published privately. 
 
 ```bash
-cargo add lool --registry=lugit --features sched
+cargo add lool --registry=lugit --features sched {sub-feature}
 ```
 
 # Sub-Features
@@ -27,6 +27,10 @@ cargo add lool --registry=lugit --features sched
 ### <a href="#"><img alt="has subfeatures" src="../../.github/img/icon-has-submodules.svg" height="12"></a>&nbsp;&nbsp;sched.tokio
 
 Enables the `tokio` runtime support, replacing the default behaviour, which implies a `std::thread` pool to run the tasks.
+
+> [!WARNING]
+> 
+> Not yet implemented
 
 ### <a href="#"><img alt="has subfeatures" src="../../.github/img/icon-has-submodules.svg" height="12"></a>&nbsp;&nbsp;sched.rule-recurrent
 
@@ -44,13 +48,6 @@ Enables the "**recurrent-rule**" style for scheduling tasks.
 - `sched.rule-pyschedule`: Enables the [python schedule](https://pypi.org/project/schedule/)-like
   style for scheduling tasks
 
-# Usage
-
-<!-- 
-TODO 
--->
-
-
 # Inspiration
 
 This library is inspired by several other libraries, including:
@@ -66,7 +63,7 @@ This library is inspired by several other libraries, including:
   a human-friendly API
 
 
-Otros:
+Other useful libraries that might come in handy for this project during development are:
 
 - https://crates.io/crates/tokio-cron-scheduler
 - https://crates.io/crates/clokwerk
