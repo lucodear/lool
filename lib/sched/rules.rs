@@ -33,10 +33,10 @@ impl SchedulingRule {
     }
 
     /// 🧉 » get the next execution time from now
-    pub fn next_from(&self, date: DateTime<Local>) -> Option<DateTime<Local>> {
+    pub fn next_from(&self, base: DateTime<Local>) -> Option<DateTime<Local>> {
         match self {
             SchedulingRule::Once(date) => {
-                if date > &date {
+                if date > &base {
                     Some(*date)
                 } else {
                     None
@@ -44,7 +44,7 @@ impl SchedulingRule {
             }
 
             #[cfg(feature = "sched.rule-recurrence")]
-            SchedulingRule::Repeat(rule) => rule.next_match_from(date),
+            SchedulingRule::Repeat(rule) => rule.next_match_from(base),
 
             #[cfg(feature = "sched.rule-cron")]
             SchedulingRule::Cron(_cron) => {
