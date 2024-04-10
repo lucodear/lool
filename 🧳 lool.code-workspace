@@ -11,10 +11,9 @@
         },
         "lucodear-icons.activeIconPack": "rust_ferris",
         "lucodear-icons.folders.associations": {
-            ".cargo": "rust",
             "stylize": "theme",
             "ruleset": "rules",
-            "recurrent": "generator"
+            "recurrent": "generator",
         },
         "lucodear-icons.files.associations": {
         

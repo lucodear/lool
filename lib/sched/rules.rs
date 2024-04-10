@@ -13,6 +13,7 @@ use chrono::{DateTime, Local};
 ///   - `Once`: runs only at a specific `chrono::DateTime`
 ///   - `Repeat`: runs at specific intervals defined by a `RecurrenceRule`
 ///   - `Cron`: runs at specific intervals defined by a cron expression
+#[derive(Clone)]
 pub enum SchedulingRule {
     /// 🧉 » a scheduling rule that makes the task run only once at a specific `chrono::DateTime`
     Once(chrono::DateTime<Local>),
@@ -53,4 +54,21 @@ impl SchedulingRule {
             }
         }
     }
+}
+
+/// 🧉 » create a new `SchedulingRule` that runs at specific intervals defined by a cron expression
+#[cfg(feature = "sched.rule-cron")]
+pub fn cron(cron: &str) -> SchedulingRule {
+    SchedulingRule::Cron(cron.to_string())
+}
+
+/// 🧉 » create a new `SchedulingRule` that runs at specific intervals defined by a `RecurrenceRule`
+#[cfg(feature = "sched.rule-recurrence")]
+pub fn recur(rule: &RecurrenceRuleSet) -> SchedulingRule {
+    SchedulingRule::Repeat(rule.clone())
+}
+
+/// 🧉 » create a new `SchedulingRule` that runs only once at a specific `chrono::DateTime`
+pub fn once(datetime: DateTime<Local>) -> SchedulingRule {
+    SchedulingRule::Once(datetime)
 }

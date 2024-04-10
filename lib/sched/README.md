@@ -5,7 +5,9 @@
 <br>
 
 <p align="center">
-<b>lool » <code>sched</code></b> is a utility library that provides a way to schedule tasks in various ways. Supports <code>std::thread</code> and the <a href="https://tokio.rs">tokio</a> runtime (as a feature flag).
+<b>lool » <code>sched</code></b> is a utility library that provides a way to schedule tasks in 
+various ways. Supports <code>std::thread</code> and the <a href="https://tokio.rs">tokio</a> runtime
+(as a feature flag).
 </p>
 
 
@@ -26,7 +28,8 @@ cargo add lool --registry=lugit --features sched {sub-feature}
 
 ### <a href="#"><img alt="has subfeatures" src="../../.github/img/icon-has-submodules.svg" height="12"></a>&nbsp;&nbsp;sched.tokio
 
-Enables the `tokio` runtime support, replacing the default behaviour, which implies a `std::thread` pool to run the tasks.
+Enables the `tokio` runtime support, replacing the default behaviour, which implies a `std::thread`
+pool to run the tasks.
 
 > [!WARNING]
 > 
