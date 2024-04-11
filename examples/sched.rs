@@ -1,6 +1,9 @@
 use {
-    eyre::{set_hook, DefaultHandler},
-    lool::sched::{recur, ruleset, Scheduler},
+    eyre::{set_hook, DefaultHandler, Result},
+    lool::{
+        logger::ConsoleLogger,
+        sched::{recur, ruleset, Scheduler},
+    },
 };
 
 fn setup_eyre() {
@@ -14,22 +17,20 @@ fn my_action() {
     std::thread::sleep(std::time::Duration::from_secs(15));
 }
 
-fn main() {
+fn main() -> Result<()> {
     setup_eyre();
+    ConsoleLogger::default_setup(log::Level::Trace, "lool::sched::recur")?;
 
     let mut sched = Scheduler::new();
+    log::debug!("scheduler created");
 
     let handler = sched.schedule("test-task", my_action, recur(ruleset().at_second(0)));
 
     std::thread::sleep(std::time::Duration::from_secs(1));
 
     loop {
-        let is_running = handler.is_running();
-        let last_run = handler.get_last_run();
-        let next_run = handler.get_next_run();
         let name = handler.name();
-
-        println!("task {name} |--> running: {is_running}, last: {last_run:?}, next: {next_run:?}");
+        println!("{:?}", handler);
 
         std::thread::sleep(std::time::Duration::from_secs(60));
 

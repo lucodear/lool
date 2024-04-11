@@ -13,7 +13,7 @@ use chrono::{DateTime, Local};
 ///   - `Once`: runs only at a specific `chrono::DateTime`
 ///   - `Repeat`: runs at specific intervals defined by a `RecurrenceRule`
 ///   - `Cron`: runs at specific intervals defined by a cron expression
-#[derive(Clone)]
+#[derive(Clone, Debug)]
 pub enum SchedulingRule {
     /// 🧉 » a scheduling rule that makes the task run only once at a specific `chrono::DateTime`
     Once(chrono::DateTime<Local>),

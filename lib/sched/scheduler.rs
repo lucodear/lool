@@ -1,20 +1,20 @@
-use std::{
-    collections::HashMap,
-    sync::{
-        atomic::{AtomicBool, AtomicPtr, Ordering},
-        Arc, Mutex,
+use {
+    eyre::{eyre, Result},
+    log::debug,
+    std::{
+        collections::HashMap,
+        sync::{
+            atomic::{AtomicBool, AtomicPtr, Ordering},
+            Arc, Mutex,
+        },
+        thread::{self, JoinHandle},
     },
-    thread::{self, JoinHandle},
 };
-
-use eyre::{eyre, Result};
 
 use {
     super::SchedulingRule,
     chrono::{DateTime, Local},
 };
-
-// TODO: add logging (always as debug)
 
 type Action = Box<dyn FnMut() + Send + Sync + 'static>;
 
@@ -138,6 +138,7 @@ impl Scheduler {
         if let Some(task) = task {
             if let Ok(task) = task.lock() {
                 task.is_stopped.store(true, Ordering::Relaxed);
+                debug!("task {} has been stopped", handler.name());
                 Ok(())
             } else {
                 Err(eyre!("error stopping task {}", handler.name()))
@@ -155,6 +156,7 @@ impl Scheduler {
         if let Some(task) = task {
             if let Ok(task) = task.lock() {
                 task.is_stopped.store(false, Ordering::Relaxed);
+                debug!("task {} has been resumed", handler.name());
                 Ok(())
             } else {
                 Err(eyre!("error resuming task {}", handler.name()))
@@ -172,6 +174,7 @@ impl Scheduler {
         if let Some(task) = task {
             if let Ok(task) = &mut task.lock() {
                 task.is_removed.store(true, Ordering::Relaxed);
+                debug!("task {} has been removed", handler.name());
 
                 Ok(())
             } else {
@@ -189,7 +192,7 @@ impl Scheduler {
 /// returned by the `Scheduler::schedule` method,
 /// this struct can be used to check and control
 /// the status of the task.
-#[derive(Clone)]
+#[derive(Clone, Debug)]
 pub struct TaskHandler {
     name: String,
     rules: Arc<Vec<SchedulingRule>>,
@@ -282,16 +285,17 @@ fn spawn_task(task_mutex: Arc<Mutex<ScheduledTask>>) -> JoinHandle<()> {
             if run_date > now {
                 // if the next run is in the future, go to bed until then
                 let sleep_until = run_date - now;
-                println!(
+                debug!(
                     "task {} will run in {} seconds",
                     name,
                     sleep_until.num_seconds()
                 );
+
                 std::thread::sleep(sleep_until.to_std().unwrap());
             } else {
                 // if the next run is in the past, run the task immediately, probably missed the
                 // run time for a few nanos
-                println!("task will run in 0 seconds");
+                debug!("task will run in 0 seconds");
             }
 
             let mut task = task_mutex.lock().unwrap();
@@ -312,6 +316,8 @@ fn spawn_task(task_mutex: Arc<Mutex<ScheduledTask>>) -> JoinHandle<()> {
                 maybe_next_run = None;
             }
         }
+
+        debug!("task {} has finished", name);
     });
 
     thread

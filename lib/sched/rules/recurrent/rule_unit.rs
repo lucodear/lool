@@ -3,7 +3,7 @@ use num_traits::PrimInt;
 /// 🧉 » a recurrence rule unit
 ///
 /// represents a single rule unit that can be used to match a value
-#[derive(Clone)]
+#[derive(Clone, Debug)]
 pub enum Rule<T>
 where
     T: PrimInt,

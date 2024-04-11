@@ -11,7 +11,7 @@ use {
 /// sets rules that define a certain recurrence behavior
 ///
 /// use the builder pattern to create a new `RecurrenceRuleSet`
-#[derive(Clone)]
+#[derive(Clone, Debug)]
 pub struct RecurrenceRuleSet {
     /// second of the minute (0..59)
     second: Option<Rule<u32>>,
