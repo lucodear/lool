@@ -3,6 +3,8 @@ use lool::sched::{recur, ruleset, Scheduler};
 fn my_action() {
     let now = chrono::Local::now();
     println!("I'm running at {}", now.format("%Y-%m-%d %H:%M:%S"));
+
+    std::thread::sleep(std::time::Duration::from_secs(15));
 }
 
 fn main() {
@@ -13,18 +15,15 @@ fn main() {
     std::thread::sleep(std::time::Duration::from_secs(1));
 
     loop {
-        {
-            let task = handler.task.lock().unwrap();
+        let is_running = handler.is_running();
+        let last_run = handler.get_last_run();
+        let next_run = handler.get_next_run();
+        let name = handler.name();
 
-            let is_running = task.is_running();
-            let last_run = task.get_last_run();
-            let name = task.name();
-
-            println!(
-                "task {} |--> is running: {}, last run: {:?}",
-                name, is_running, last_run
-            );
-        }
+        println!(
+            "task {name} |--> running: {is_running}, last: {last_run:?}, next: {next_run:?}"
+        );
+        
 
         std::thread::sleep(std::time::Duration::from_secs(2));
     }
