@@ -1,11 +1,16 @@
-use std::sync::{
-    atomic::{AtomicBool, AtomicPtr, AtomicUsize, Ordering},
-    Arc, Mutex,
+use std::{
+    collections::HashMap,
+    sync::{
+        atomic::{AtomicBool, AtomicPtr, Ordering},
+        Arc, Mutex,
+    },
+    thread::{self, JoinHandle},
 };
+
+use eyre::{eyre, Result};
 
 use {
     super::SchedulingRule,
-    crate::utils::threads::threadpool::ThreadPool,
     chrono::{DateTime, Local},
 };
 
@@ -21,7 +26,6 @@ type Action = Box<dyn FnMut() + Send + Sync + 'static>;
 /// status of the task.
 pub struct ScheduledTask {
     #[allow(dead_code)]
-    index: Arc<AtomicUsize>,
     name: String,
     action: Action,
     rules: Arc<Vec<SchedulingRule>>,
@@ -39,7 +43,6 @@ impl ScheduledTask {
 
     fn make_handler(&self) -> TaskHandler {
         TaskHandler {
-            index: self.index.clone(),
             name: self.name.clone(),
             rules: self.rules.clone(),
             is_running: self.is_running.clone(),
@@ -47,6 +50,14 @@ impl ScheduledTask {
             is_removed: self.is_removed.clone(),
             last_run: self.last_run.clone(),
         }
+    }
+
+    fn is_active(&self) -> bool {
+        !self.is_stopped.load(Ordering::Relaxed) && !self.is_removed.load(Ordering::Relaxed)
+    }
+
+    fn is_removed(&self) -> bool {
+        self.is_removed.load(Ordering::Relaxed)
     }
 }
 
@@ -57,8 +68,7 @@ impl ScheduledTask {
 ///
 /// Each task can have n rules, and the task will be executed when any of the rules is met.
 pub struct Scheduler {
-    pool: ThreadPool,
-    tasks: Vec<Arc<Mutex<ScheduledTask>>>,
+    tasks: HashMap<String, Arc<Mutex<ScheduledTask>>>,
 }
 
 impl Default for Scheduler {
@@ -69,23 +79,9 @@ impl Default for Scheduler {
 
 impl Scheduler {
     /// 🧉 » create a new scheduler
-    ///
-    /// default constructor, sets the internal thread pool to have 5 threads at most.
     pub fn new() -> Self {
         Self {
-            tasks: vec![],
-            pool: ThreadPool::create(5).unwrap(),
-        }
-    }
-
-    /// 🧉 » create a new scheduler
-    ///
-    /// creates a new scheduler, just like `Scheduler::new`, but with a specific capacity for the
-    /// internal thread pool.
-    pub fn with_capacity(capacity: usize) -> Self {
-        Self {
-            tasks: vec![],
-            pool: ThreadPool::create(capacity).unwrap(),
+            tasks: HashMap::new(),
         }
     }
 
@@ -111,10 +107,7 @@ impl Scheduler {
     where
         F: FnMut() + Send + Sync + 'static,
     {
-        let index = self.tasks.len();
-
         let task = Arc::new(Mutex::new(ScheduledTask {
-            index: Arc::new(AtomicUsize::new(index)),
             name: name.to_string(),
             action: Box::new(action),
             rules: Arc::new(rules),
@@ -124,9 +117,10 @@ impl Scheduler {
             last_run: Arc::new(AtomicPtr::new(std::ptr::null_mut())),
         }));
 
-        self.tasks.push(task.clone());
+        self.tasks.insert(name.to_string(), task.clone());
 
-        run_in_pool(task.clone(), &self.pool);
+        // launch the task in its own thread
+        spawn_task(task.clone());
 
         let handler: TaskHandler = {
             let task = task.lock().unwrap();
@@ -134,6 +128,59 @@ impl Scheduler {
         };
 
         handler
+    }
+
+    /// 🧉 » stop a task
+    pub fn stop(&mut self, handler: &TaskHandler) -> Result<()> {
+        // get the task from the tasks map
+        let task = self.tasks.get(handler.name());
+
+        if let Some(task) = task {
+            if let Ok(task) = task.lock() {
+                task.is_stopped.store(true, Ordering::Relaxed);
+                Ok(())
+            } else {
+                Err(eyre!("error stopping task {}", handler.name()))
+            }
+        } else {
+            Err(eyre!("task {} was not found", handler.name()))
+        }
+    }
+
+    /// 🧉 » resume a task
+    pub fn resume(&mut self, handler: &TaskHandler) -> Result<()> {
+        // get the task from the tasks map
+        let task = self.tasks.get(handler.name());
+
+        if let Some(task) = task {
+            if let Ok(task) = task.lock() {
+                task.is_stopped.store(false, Ordering::Relaxed);
+                Ok(())
+            } else {
+                Err(eyre!("error resuming task {}", handler.name()))
+            }
+        } else {
+            Err(eyre!("task {} was not found", handler.name()))
+        }
+    }
+
+    /// 🧉 » remove a task
+    pub fn remove(&mut self, handler: &TaskHandler) -> Result<()> {
+        // get the task from the tasks map
+        let task = self.tasks.remove(handler.name());
+
+        if let Some(task) = task {
+            if let Ok(task) = &mut task.lock() {
+                task.is_removed.store(true, Ordering::Relaxed);
+
+                Ok(())
+            } else {
+                Err(eyre!("error removing task {}", handler.name()))
+            }
+        } else {
+            handler.is_removed.store(true, Ordering::Relaxed);
+            Err(eyre!("task {} was not found", handler.name()))
+        }
     }
 }
 
@@ -145,7 +192,6 @@ impl Scheduler {
 #[derive(Clone)]
 pub struct TaskHandler {
     name: String,
-    index: Arc<AtomicUsize>,
     rules: Arc<Vec<SchedulingRule>>,
     is_running: Arc<AtomicBool>,
     is_stopped: Arc<AtomicBool>,
@@ -171,7 +217,11 @@ impl TaskHandler {
     ///
     /// returns a `DateTime<Local>` representing the next time the task is scheduled to run
     pub fn get_next_run(&self) -> Option<DateTime<Local>> {
-        get_next_run_time(&self.rules, None)
+        if self.is_active() {
+            return get_next_run_time(&self.rules, None);
+        }
+
+        None
     }
 
     /// 🧉 » is running?
@@ -215,12 +265,11 @@ impl TaskHandler {
     }
 }
 
-/// **main function to run the task in the thread pool**
+/// **main function to run the task in its own thread**
 ///
-/// it spawns a new job in the thread pool to run the task until the task is no longer scheduled to
-/// run.
-fn run_in_pool(task_mutex: Arc<Mutex<ScheduledTask>>, pool: &ThreadPool) {
-    pool.execute(move || {
+/// it creates a new thread and runs the task according to its scheduling rules.
+fn spawn_task(task_mutex: Arc<Mutex<ScheduledTask>>) -> JoinHandle<()> {
+    let thread = thread::spawn(move || {
         let (mut maybe_next_run, name) = {
             let task = task_mutex.lock().unwrap();
             let rules = &task.rules;
@@ -247,18 +296,25 @@ fn run_in_pool(task_mutex: Arc<Mutex<ScheduledTask>>, pool: &ThreadPool) {
 
             let mut task = task_mutex.lock().unwrap();
 
-            let run_date_box = Box::new(run_date);
-            let run_date_raw = Box::into_raw(run_date_box);
-            task.last_run.store(run_date_raw, Ordering::Relaxed);
+            if task.is_active() {
+                let run_date_box = Box::new(run_date);
+                let run_date_raw = Box::into_raw(run_date_box);
 
-            task.is_running.store(true, Ordering::SeqCst);
-            task.run();
-            task.is_running.store(false, Ordering::SeqCst);
+                task.last_run.store(run_date_raw, Ordering::Relaxed);
+                task.is_running.store(true, Ordering::SeqCst);
+                task.run();
+                task.is_running.store(false, Ordering::SeqCst);
+            }
 
-            let run_date_box = unsafe { Box::from_raw(task.last_run.load(Ordering::Relaxed)) };
-            maybe_next_run = get_next_run_time(&task.rules, Some(*run_date_box));
+            if !task.is_removed() {
+                maybe_next_run = get_next_run_time(&task.rules, Some(run_date));
+            } else {
+                maybe_next_run = None;
+            }
         }
     });
+
+    thread
 }
 
 /// **get next run time**
