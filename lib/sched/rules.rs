@@ -1,11 +1,18 @@
-#[cfg(feature = "sched.rule-cron")]
-mod cron;
 #[cfg(feature = "sched.rule-recurrence")]
 mod recurrent;
 #[cfg(feature = "sched.rule-recurrence")]
 pub use self::recurrent::{many, range, ranges, ruleset, val, RecurrenceRuleSet, Rule};
 
-use chrono::{DateTime, Local};
+#[cfg(feature = "sched.rule-cron")]
+mod cron;
+#[cfg(feature = "sched.rule-cron")]
+pub use self::cron::Cron;
+
+use {
+    chrono::{DateTime, Local},
+    eyre::Result,
+    std::fmt::Debug,
+};
 
 /// 🧉 » a scheduling rule
 ///
@@ -24,7 +31,7 @@ pub enum SchedulingRule {
 
     /// 🧉 » a scheduling rule expressed in cron format
     #[cfg(feature = "sched.rule-cron")]
-    Cron(String),
+    Cron(Cron),
 }
 
 impl SchedulingRule {
@@ -48,9 +55,9 @@ impl SchedulingRule {
             SchedulingRule::Repeat(rule) => rule.next_match_from(base),
 
             #[cfg(feature = "sched.rule-cron")]
-            SchedulingRule::Cron(_cron) => {
-                // TODO: implement cron scheduling rule
-                unimplemented!()
+            SchedulingRule::Cron(pattern) => {
+                let next = pattern.find_next_occurrence(&base, false);
+                next.ok()
             }
         }
     }
@@ -58,8 +65,9 @@ impl SchedulingRule {
 
 /// 🧉 » create a new `SchedulingRule` that runs at specific intervals defined by a cron expression
 #[cfg(feature = "sched.rule-cron")]
-pub fn cron(cron: &str) -> SchedulingRule {
-    SchedulingRule::Cron(cron.to_string())
+pub fn cron(pattern: &str) -> Result<SchedulingRule> {
+    let cron = Cron::new(pattern)?;
+    Ok(SchedulingRule::Cron(cron))
 }
 
 /// 🧉 » create a new `SchedulingRule` that runs at specific intervals defined by a `RecurrenceRule`

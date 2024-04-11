@@ -30,8 +30,8 @@ path = "lib/lib.rs"
 # scheduling
 "sched" = ["dep:chrono", "dep:log"]
 "sched.tokio" = ["dep:tokio", "tokio?/time", "tokio?/rt", "sched"]
-"sched.rule-recurrence" = ["sched"]
-"sched.rule-cron" = ["sched"]
+"sched.rule-recurrence" = ["sched", "dep:num-traits"]
+"sched.rule-cron" = ["sched", "dep:croner"]
 # utils
 "utils" = []
 "utils.threads" = ["macros", "utils", "dep:log"]
@@ -46,6 +46,8 @@ bitflags = { version = "2.5.0", optional = true }
 chrono = { version = "0.4.37", optional = true }
 log = { version = "0.4.21", optional = true }
 tokio = { version = "1.37.0", optional = true }
-num-traits = "0.2.18"
+croner = { version = "2.0.4", optional = true }
+num-traits = { version = "0.2.18", optional = true }
+
 
 

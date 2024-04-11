@@ -98,6 +98,15 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "06ea2b9bc92be3c2baa9334a323ebca2d6f074ff852cd1d7b11064035cd3868f"
 
 [[package]]
+name = "croner"
+version = "2.0.4"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "516aad5374ea0ea75a0f0f4512fb4e7ad46c5eeff9971cb8ebc8fd74f1cd16c1"
+dependencies = [
+ "chrono",
+]
+
+[[package]]
 name = "eyre"
 version = "0.6.12"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -169,6 +178,7 @@ version = "0.0.5"
 dependencies = [
  "bitflags",
  "chrono",
+ "croner",
  "eyre",
  "log",
  "num-traits",
