@@ -2,39 +2,43 @@ use {
     eyre::{set_hook, DefaultHandler, Result},
     lool::{
         logger::ConsoleLogger,
-        sched::{recur, ruleset, scheduler::threads::Scheduler},
+        sched::{recur, ruleset, scheduler::tokio::Scheduler},
     },
+    tokio::time::sleep,
 };
 
 fn setup_eyre() {
     let _ = set_hook(Box::new(DefaultHandler::default_with));
 }
 
-fn my_action() {
+async fn my_action() {
     let now = chrono::Local::now();
     println!("I'm running at {}", now.format("%Y-%m-%d %H:%M:%S"));
 
-    std::thread::sleep(std::time::Duration::from_secs(15));
+    sleep(std::time::Duration::from_secs(15)).await;
 }
 
-fn main() -> Result<()> {
+#[tokio::main(flavor = "current_thread")]
+async fn main() -> Result<()> {
     setup_eyre();
     ConsoleLogger::default_setup(log::Level::Trace, "lool::sched::recur")?;
 
     let mut sched = Scheduler::new();
     log::debug!("scheduler created");
 
-    let handler = sched.schedule("test-task", my_action, recur(ruleset().at_second(0)));
+    let handler = sched.schedule("test-task", my_action, recur(ruleset().at_second(0))).await;
 
-    std::thread::sleep(std::time::Duration::from_secs(1));
+    sleep(std::time::Duration::from_secs(1)).await;
 
     loop {
         let name = handler.name();
         println!("{:?}", handler);
 
-        std::thread::sleep(std::time::Duration::from_secs(60));
+        handler.get_next_run();
 
-        let result = sched.remove(&handler);
+        sleep(std::time::Duration::from_secs(60)).await;
+
+        let result = sched.remove(&handler).await;
 
         if result.is_ok() {
             println!("task {name} removed");

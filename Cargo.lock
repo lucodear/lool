@@ -183,6 +183,7 @@ dependencies = [
  "log",
  "num-traits",
  "tokio",
+ "tokio_schedule",
 ]
 
 [[package]]
@@ -273,6 +274,28 @@ checksum = "1adbebffeca75fcfd058afa480fb6c0b81e165a0323f9c9d39c9697e37c46787"
 dependencies = [
  "backtrace",
  "pin-project-lite",
+ "tokio-macros",
+]
+
+[[package]]
+name = "tokio-macros"
+version = "2.2.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "5b8a1e28f2deaa14e508979454cb3a223b10b938b45af148bc0986de36f1923b"
+dependencies = [
+ "proc-macro2",
+ "quote",
+ "syn",
+]
+
+[[package]]
+name = "tokio_schedule"
+version = "0.3.1"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "1b4a14ab1658c39d137ebcc5fbaab364c9922a6cc04ab48b364546c2e6022256"
+dependencies = [
+ "chrono",
+ "tokio",
 ]
 
 [[package]]

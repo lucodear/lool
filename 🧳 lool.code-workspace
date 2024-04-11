@@ -19,30 +19,5 @@
         
         },
         "rust-analyzer.cargo.features": "all",
-        "files.exclude": {
-            "**/.git": false,
-            "**/.svn": false,
-            "**/.hg": false,
-            "**/CVS": false,
-            "**/.DS_Store": false,
-            "**/Thumbs.db": true,
-            "**/.classpath": false,
-            "**/.factorypath": true,
-            "**/.project": false,
-            "**/.settings": true,
-            "*.ids": false,
-            "*.iml": false,
-            "*.ipr": false,
-            "*.iws": false,
-            "*.orig": false,
-            ".gradle": false,
-            ".idea/": false,
-            ".out/": false,
-            ".settings": false,
-            ".vscode": false,
-            "bin/": false,
-            "build/": false,
-            "out/": false
-        },
     }
 }
