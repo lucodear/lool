@@ -32,18 +32,25 @@ where
         match matcher {
             Rule::Val(v) => value == *v,
             Rule::Range(start, end, step) => {
-                if *step == T::one() {
-                    value >= *start && value <= *end
-                } else {
-                    let mut current = *start;
-                    while current <= *end {
-                        if current == value {
-                            return true;
-                        }
-                        // Move to the next value based on the step size
-                        current = current + *step;
+                if *start == *end {
+                    return value == *start;
+                }
+
+                if *step == T::zero() || *step == T::one() {
+                    if *start < *end {
+                        return value >= *start && value <= *end;
+                    } else {
+                        return value >= *start || value <= *end;
                     }
-                    false
+                } else {
+                    if *start < *end {
+                        return value >= *start
+                            && value <= *end
+                            && (value - *start) % *step == T::zero();
+                    } else {
+                        return (value >= *start || value <= *end)
+                            && (*start - value) % *step == T::zero();
+                    }
                 }
             }
             Rule::Many(matcher) => matcher.iter().any(|v| Self::_matches(&Rule::Val(*v), value)),
@@ -83,4 +90,86 @@ pub fn many<T: PrimInt>(values: Vec<T>) -> Rule<T> {
 /// 🧉 » create a `Rule` that will match a list of rages
 pub fn ranges<T: PrimInt>(ranges: Vec<(T, T, T)>) -> Rule<T> {
     Rule::Ranges(ranges)
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_rule_val() {
+        let rule = val(5);
+        assert!(rule.matches(5));
+        assert!(!rule.matches(6));
+    }
+
+    #[test]
+    fn test_rule_range() {
+        let rule = range(5, 10, 1);
+        assert!(rule.matches(5));
+        assert!(rule.matches(6));
+        assert!(rule.matches(10));
+        assert!(!rule.matches(11));
+    }
+
+    #[test]
+    fn test_rule_range_step() {
+        let rule = range(5, 10, 2);
+        assert!(rule.matches(5));
+        assert!(!rule.matches(6));
+        assert!(rule.matches(7));
+        assert!(!rule.matches(8));
+        assert!(rule.matches(9));
+        assert!(!rule.matches(10));
+        assert!(!rule.matches(11));
+    }
+
+    #[test]
+    fn test_rule_wrapping_range() {
+        // imagine a week where 0 is Sunday and 6 is Saturday
+        // s | m | t | w | t | f | s
+        // 0 | 1 | 2 | 3 | 4 | 5 | 6
+
+        // if a range rules goes from 5 to 2, it should match 5, 6, 0, 1, 2
+        // since our rule doesn't have max and min values, it should match any value
+        // >= 5 and any value <= 2, (well, taking step into account, obviously)
+
+        // TODO: maybe in the future we could add another rule type "WrappingRange" that would
+        //       handle this case more explicitly and taking into account the min-max wrapping
+        //       limits (like 0 and 6 in this case). It obviously would need its WrappingRanges
+        //       analogs just like we have Ranges for Range... for now we can just use the
+        //       Range rule and be happy with it
+
+        let rule = range(5, 2, 1);
+        assert!(rule.matches(5));
+        assert!(rule.matches(6));
+        assert!(rule.matches(0));
+        assert!(rule.matches(1));
+        assert!(rule.matches(2));
+        assert!(!rule.matches(3));
+        assert!(!rule.matches(4));
+
+        // would match any value >= 5 too
+        assert!(rule.matches(7));
+    }
+
+    #[test]
+    fn test_rule_many() {
+        let rule = many(vec![5, 10, 15]);
+        assert!(rule.matches(5));
+        assert!(rule.matches(10));
+        assert!(rule.matches(15));
+        assert!(!rule.matches(11));
+    }
+
+    #[test]
+    fn test_rule_ranges() {
+        let rule = ranges(vec![(5, 10, 1), (15, 20, 1)]);
+        assert!(rule.matches(5));
+        assert!(rule.matches(6));
+        assert!(rule.matches(10));
+        assert!(rule.matches(15));
+        assert!(rule.matches(20));
+        assert!(!rule.matches(11));
+    }
 }

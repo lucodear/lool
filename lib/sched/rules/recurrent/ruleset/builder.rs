@@ -92,9 +92,36 @@ impl RecurrenceRuleSet {
         self.time_rule(Rule::Val(hour), Rule::Val(minute), Rule::Val(second))
     }
 
-    /// 🧉 » set the day of the week rule as a single value from primitive
-    pub fn on_dow(&mut self, value: Weekday) -> &mut Self {
+    /// 🧉 » set the day of the week rule as a single value
+    pub fn on_weekday(&mut self, value: Weekday) -> &mut Self {
         self.dow_rule(Rule::Val(value.num_days_from_sunday()))
+    }
+
+    /// 🧉 » set the day of the week rule as a single value (`dow` from Sunday 0)
+    pub fn on_dow(&mut self, value: u32) -> &mut Self {
+        self.dow_rule(Rule::Val(value))
+    }
+
+    /// 🧉 » set the day of the week rule as a range between two `Weekday`
+    pub fn from_to_weekdays(&mut self, from: Weekday, to: Weekday) -> &mut Self {
+        if from == to {
+            return self;
+        }
+
+        self.dow_rule(Rule::Range(
+            from.num_days_from_sunday(),
+            to.num_days_from_sunday(),
+            1,
+        ))
+    }
+
+    /// 🧉 » set the day of the week rule as a range between two values (`dow` from Sunday 0)
+    pub fn from_to_dow(&mut self, from: u32, to: u32) -> &mut Self {
+        if from == to {
+            return self;
+        }
+
+        self.dow_rule(Rule::Range(from, to, 1))
     }
 
     /// 🧉 » set the day of the month rule as a single value from primitive

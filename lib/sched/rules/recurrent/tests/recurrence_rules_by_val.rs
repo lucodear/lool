@@ -97,7 +97,7 @@ fn each_wednesday() {
     let mut next_wednesday = Local.with_ymd_and_hms(2024, 4, 10, 0, 0, 0).unwrap();
 
     let mut rules = ruleset();
-    rules.on_dow(Weekday::Wed).at_time(0, 0, 0);
+    rules.on_weekday(Weekday::Wed).at_time(0, 0, 0);
 
     let mut next = date;
 
