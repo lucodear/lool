@@ -9,7 +9,7 @@ const INVALID_OFFSET_MIN_ERR: &str = "invalid timezone offset (minute should be 
 const INVALID_TIME_ERR: &str = "invalid time format, expected `hh:mm{{:ss}}?`";
 
 /// 🧉 » parses a time string into hours, minutes and seconds
-/// 
+///
 /// e.g. `12:30` -> `(12, 30, 0)`
 pub fn parse_time(time: &str) -> Result<(u32, u32, u32)> {
     let parts: Vec<&str> = time.split(':').collect();
@@ -52,9 +52,18 @@ pub fn hm_to_s(h: i32, m: i32) -> i32 {
 pub fn tz_to_s(offset: &str) -> Result<i32> {
     // if it doesn't start with '+' or '-', it's invalid
     ensure!(
-        offset.starts_with('+') || offset.starts_with('-'),
+        offset.starts_with('+')
+            || offset.starts_with('-')
+            || offset.starts_with("UTC-")
+            || offset.starts_with("UTC+"),
         NO_SIGN_ERR
     );
+
+    let offset = if offset.starts_with("UTC") {
+        offset[3..].to_string()
+    } else {
+        offset.to_string()
+    };
 
     let sign = if offset.starts_with('+') { 1 } else { -1 };
     let parts: Vec<&str> = offset[1..].split(':').collect();
@@ -107,6 +116,16 @@ mod tests {
         assert_eq!(tz_to_s("-00:00")?, 0);
         assert_eq!(tz_to_s("-3")?, -10800);
         assert_eq!(tz_to_s("-3:30")?, -12600);
+
+        // UTC+ and UTC- are also valid
+
+        assert_eq!(tz_to_s("UTC+01:00")?, 3600);
+        assert_eq!(tz_to_s("UTC-03:00")?, -10800);
+        assert_eq!(tz_to_s("UTC+03")?, 10800);
+        assert_eq!(tz_to_s("UTC+00:00")?, 0);
+        assert_eq!(tz_to_s("UTC-00:00")?, 0);
+        assert_eq!(tz_to_s("UTC-3")?, -10800);
+        assert_eq!(tz_to_s("UTC-3:30")?, -12600);
 
         Ok(())
     }
