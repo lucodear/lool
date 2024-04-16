@@ -6,6 +6,29 @@ const NO_SIGN_ERR: &str = "invalid timezone offset";
 const INVALID_OFFSET_ERR: &str = "invalid timezone offset (format should be `+hh{{:mm}}?`)";
 const INVALID_OFFSET_HS_ERR: &str = "invalid timezone offset (hour should be between 0 and 14)";
 const INVALID_OFFSET_MIN_ERR: &str = "invalid timezone offset (minute should be between 0 and 59)";
+const INVALID_TIME_ERR: &str = "invalid time format, expected `hh:mm{{:ss}}?`";
+
+/// 🧉 » parses a time string into hours, minutes and seconds
+/// 
+/// e.g. `12:30` -> `(12, 30, 0)`
+pub fn parse_time(time: &str) -> Result<(u32, u32, u32)> {
+    let parts: Vec<&str> = time.split(':').collect();
+    ensure!(parts.len() > 1, INVALID_TIME_ERR);
+
+    let hours = parts[0].parse::<u32>().map_err(|_| eyre!(INVALID_TIME_ERR))?;
+    let minutes = parts[1].parse::<u32>().map_err(|_| eyre!(INVALID_TIME_ERR))?;
+    ensure!(hours <= 23, INVALID_TIME_ERR);
+    ensure!(minutes <= 59, INVALID_TIME_ERR);
+
+    let seconds = if parts.len() == 3 {
+        parts[2].parse::<u32>().map_err(|_| eyre!(INVALID_TIME_ERR))?
+    } else {
+        0
+    };
+
+    ensure!(seconds <= 59, INVALID_TIME_ERR);
+    Ok((hours as u32, minutes as u32, seconds as u32))
+}
 
 /// 🧉 » converts `hours` and `minutes` durations to total seconds
 ///
