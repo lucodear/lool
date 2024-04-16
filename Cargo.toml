@@ -22,7 +22,7 @@ path = "lib/lib.rs"
 [features]
 # cli utilities
 "cli" = []
-"cli.stylize" = ["dep:bitflags"]
+"cli.stylize" = ["cli", "dep:bitflags"]
 # logging
 "logger" = ["dep:log"]
 # macros
@@ -30,10 +30,10 @@ path = "lib/lib.rs"
 # scheduling
 "sched" = ["dep:chrono", "dep:log"]
 "sched.tokio" = [
+    "sched",
     "dep:tokio",
     "tokio?/time",
     "tokio?/rt",
-    "sched",
     "tokio?/macros",
     "tokio?/sync",
 ]
@@ -42,7 +42,7 @@ path = "lib/lib.rs"
 "sched.rule-cron" = ["sched", "dep:croner"]
 # utils
 "utils" = []
-"utils.threads" = ["macros", "utils", "dep:log"]
+"utils.threads" = ["utils", "macros", "dep:log"]
 
 
 [dependencies]
@@ -62,15 +62,9 @@ tokio_schedule = "0.3.1"
 [[example]]
 name = "sched"
 path = "examples/sched.rs"
-required-features = [
-    "sched.threads",
-    "sched.rule-recurrence",
-]
+required-features = ["sched.threads", "sched.rule-recurrence"]
 
 [[example]]
 name = "sched_tokio"
 path = "examples/sched_tokio.rs"
-required-features = [
-    "sched.tokio",
-    "sched.rule-recurrence",
-]
+required-features = ["sched.tokio", "sched.rule-recurrence"]
