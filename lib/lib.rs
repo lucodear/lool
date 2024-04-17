@@ -1,4 +1,6 @@
-#![doc(html_logo_url = "https://raw.githubusercontent.com/lucodear/lool/master/.github/img/logo.svg")]
+#![doc(
+    html_logo_url = "https://raw.githubusercontent.com/lucodear/lool/master/.github/img/logo.svg"
+)]
 
 #[cfg(feature = "cli")]
 pub mod cli;

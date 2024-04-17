@@ -38,19 +38,17 @@ where
 
                 if *step == T::zero() || *step == T::one() {
                     if *start < *end {
-                        return value >= *start && value <= *end;
+                        value >= *start && value <= *end
                     } else {
-                        return value >= *start || value <= *end;
+                        value >= *start || value <= *end
                     }
+                } else if *start < *end {
+                    value >= *start
+                        && value <= *end
+                        && (value - *start) % *step == T::zero()
                 } else {
-                    if *start < *end {
-                        return value >= *start
-                            && value <= *end
-                            && (value - *start) % *step == T::zero();
-                    } else {
-                        return (value >= *start || value <= *end)
-                            && (*start - value) % *step == T::zero();
-                    }
+                    (value >= *start || value <= *end)
+                        && (*start - value) % *step == T::zero()
                 }
             }
             Rule::Many(matcher) => matcher.iter().any(|v| Self::_matches(&Rule::Val(*v), value)),

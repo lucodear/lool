@@ -27,7 +27,7 @@ pub fn parse_time(time: &str) -> Result<(u32, u32, u32)> {
     };
 
     ensure!(seconds <= 59, INVALID_TIME_ERR);
-    Ok((hours as u32, minutes as u32, seconds as u32))
+    Ok((hours, minutes, seconds))
 }
 
 /// 🧉 » converts `hours` and `minutes` durations to total seconds
@@ -59,10 +59,10 @@ pub fn tz_to_s(offset: &str) -> Result<i32> {
         NO_SIGN_ERR
     );
 
-    let offset = if offset.starts_with("UTC") {
-        offset[3..].to_string()
+    let offset = if let Some(offset) = offset.strip_prefix("UTC") {
+        offset
     } else {
-        offset.to_string()
+        offset
     };
 
     let sign = if offset.starts_with('+') { 1 } else { -1 };
