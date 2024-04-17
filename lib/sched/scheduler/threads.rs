@@ -88,10 +88,12 @@ impl Scheduler {
     /// 🧉 » schedule a task
     ///
     /// schedules a task to be executed at times determined by the provided rules.
-    pub fn schedule<F>(&mut self, name: &str, action: F, rules: SchedulingRule) -> TaskHandler
+    pub fn schedule<F, Str>(&mut self, name: Str, action: F, rules: SchedulingRule) -> TaskHandler
     where
         F: FnMut() + Send + Sync + 'static,
+        Str: AsRef<str>,
     {
+        let name = name.as_ref();
         self.schedule_many_rules(name, action, vec![rules])
     }
 

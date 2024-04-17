@@ -80,16 +80,18 @@ impl Scheduler {
     /// 🧉 » schedule a task
     ///
     /// schedules a task to be executed at times determined by the provided rules.
-    pub async fn schedule<F, Fut>(
+    pub async fn schedule<F, Fut, Str>(
         &mut self,
-        name: &str,
+        name: Str,
         func: F,
         rules: SchedulingRule,
     ) -> TaskHandler
     where
         F: FnMut() -> Fut + Send + 'static,
         Fut: Future<Output = ()> + Send + 'static,
+        Str: AsRef<str>,
     {
+        let name = name.as_ref();
         self.schedule_many_rules(name, func, vec![rules]).await
     }
 
