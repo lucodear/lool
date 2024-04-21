@@ -77,9 +77,10 @@ impl Scheduler {
         }
     }
 
-    /// 🧉 » schedule a task
+    /// 🧉 » schedule an async task
     ///
-    /// schedules a task to be executed at times determined by the provided rules.
+    /// schedules an async function to be executed as a task at time intervals determined by the
+    /// provided     /// rules.
     pub async fn schedule<F, Fut, Str>(
         &mut self,
         name: Str,
@@ -92,25 +93,43 @@ impl Scheduler {
         Str: AsRef<str>,
     {
         let name = name.as_ref();
-        self.schedule_many_rules(name, func, vec![rules]).await
+        let mut func = func;
+        self.schedule_many_rules(name, func(), vec![rules]).await
+    }
+
+    /// 🧉 » schedule a future
+    ///
+    /// schedules a future to be executed as a task at time intervals determined by the provided
+    /// rules.
+    pub async fn schedule_fut<Fut, Str>(
+        &mut self,
+        name: Str,
+        future: Fut,
+        rules: SchedulingRule,
+    ) -> TaskHandler
+    where
+        Fut: Future<Output = ()> + Send + 'static,
+        Str: AsRef<str>,
+    {
+        let name = name.as_ref();
+        self.schedule_many_rules(name, future, vec![rules]).await
     }
 
     /// 🧉 » schedule a task
     ///
     /// schedules a task to be executed at times determined by the provided rules.
-    pub async fn schedule_many_rules<F, Fut>(
+    pub async fn schedule_many_rules<Fut>(
         &mut self,
         name: &str,
-        mut func: F,
+        future: Fut,
         rules: Vec<SchedulingRule>,
     ) -> TaskHandler
     where
-        F: FnMut() -> Fut + Send + 'static,
         Fut: Future<Output = ()> + Send + 'static,
     {
         let task = Arc::new(Mutex::new(ScheduledTask {
             name: name.to_string(),
-            action: Box::pin(func()),
+            action: Box::pin(future),
             rules: Arc::new(rules),
             is_running: Arc::new(AtomicBool::new(false)),
             is_stopped: Arc::new(AtomicBool::new(false)),
