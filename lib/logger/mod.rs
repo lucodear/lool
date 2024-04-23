@@ -1,8 +1,11 @@
 pub mod datetime;
-
-use eyre::{eyre, Result};
 pub use log::{
     debug, error, info, set_max_level, trace, warn, Level, LevelFilter, Log, Metadata, Record,
+};
+
+use {
+    eyre::{eyre, Result},
+    std::path::Path,
 };
 
 const RESET: &str = "\x1b[0m";
@@ -33,16 +36,23 @@ impl StyledRecord {
             time = format!("\x1b[2m{}\x1b[0m", time); // dim
         }
 
+        let file = Path::new(record.file().unwrap_or("unknown"));
+
+        let line = match file.is_absolute() {
+            true => String::from(""),
+            false => format!("{}{}{}", line_ansi_color, record.line().unwrap_or(0), RESET),
+        };
+
+        let file = match file.is_absolute() {
+            true => record.module_path().unwrap_or("unknown"),
+            false => file.to_str().unwrap_or("unknown"),
+        };
+
         Self {
             level: format!("{}{:<5}{}", ansi_style_level, record.level(), RESET),
             message: format!("{}", record.args()),
-            file: format!(
-                "{}{}{}",
-                file_ansi_color,
-                record.file().unwrap_or("unknown").replace('\\', "/"),
-                RESET
-            ),
-            line: format!("{}{}{}", line_ansi_color, record.line().unwrap_or(0), RESET),
+            file: format!("{}{}{}", file_ansi_color, file.replace('\\', "/"), RESET),
+            line,
             time,
         }
     }
