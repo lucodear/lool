@@ -18,12 +18,18 @@ async fn main() -> Result<()> {
 
     let mut sched = Scheduler::new();
     log::debug!("scheduler created");
-    
+
     let now = chrono::Local::now();
 
-    let handler = sched.schedule_fut("test-task", async move {
-        println!("I'm running at {}", &now.format("%Y-%m-%d %H:%M:%S"));
-    }, recur(ruleset().at_second(0))).await;
+    let handler = sched
+        .schedule_fut(
+            "test-task",
+            async move {
+                println!("I'm running at {}", &now.format("%Y-%m-%d %H:%M:%S"));
+            },
+            recur(ruleset().at_second(0)),
+        )
+        .await;
 
     sleep(std::time::Duration::from_secs(1)).await;
 
