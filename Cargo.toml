@@ -43,7 +43,8 @@ path = "lib/lib.rs"
 # utils
 "utils" = []
 "utils.threads" = ["utils", "macros", "dep:log"]
-
+# service container
+"di" = []
 
 [dependencies]
 # default

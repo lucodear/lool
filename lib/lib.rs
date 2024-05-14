@@ -5,6 +5,9 @@
 #[cfg(feature = "cli")]
 pub mod cli;
 
+#[cfg(feature = "di")]
+pub mod di;
+
 #[cfg(feature = "sched")]
 pub mod sched;
 
