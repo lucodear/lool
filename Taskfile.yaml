@@ -47,7 +47,7 @@ tasks:
   lint:check:
     desc: 🧶 check linting
     cmds:
-        - cargo clippy --all-features --allow-staged
+        - cargo clippy --all-features
 
   fmt+lint:
     desc: 🎨🧶 format and lint rustler
