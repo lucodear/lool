@@ -49,6 +49,13 @@ tasks:
     cmds:
         - cargo clippy --all-features --allow-staged
 
+  fmt+lint:
+    desc: 🎨🧶 format and lint rustler
+    cmds:
+        - task fmt
+        - git add .
+        - task lint
+
   test:
     desc: 🧪 test lool
     cmds:
