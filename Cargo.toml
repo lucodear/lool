@@ -5,6 +5,7 @@ edition = "2021"
 description = "🧳 lool » lucode.ar rust common utilities"
 authors = ["Lucas Colombo <lucas@lucode.ar>"]
 repository = "https://github.com/lucodear/lool/tree/master/lib/sched"
+license = "MIT"
 
 [profile.release]
 strip = true
