@@ -1,6 +1,6 @@
 [package]
 name = "lool"
-version = "0.2.1"
+version = "0.3.0"
 edition = "2021"
 description = "🧳 lool » lucode.ar rust common utilities"
 authors = ["Lucas Colombo <lucas@lucode.ar>"]
