@@ -44,7 +44,32 @@ tasks:
     cmds:
       - cargo nextest run --all-features
 
-  publish:
-    desc: 🚀 publish lool
+  release:patch:
+    desc: 🚀 release «patch» version of lool
+    deps:
+        - release:pre
     cmds:
-      - cargo publish --registry lugit
+        - cargo release patch --execute --no-confirm
+  
+  release:minor:
+    desc: 🚀 release «minor» version of lool
+    deps:
+        - release:pre
+    cmds:
+        - cargo release minor --execute --no-confirm
+
+  release:major:
+    desc: 🚀 release «major» version of lool
+    deps:
+        - release:pre
+    cmds:
+        - cargo release major --execute --no-confirm
+
+  release:
+      aliases:
+        - "publish"
+      desc: 🚀 release «patch» version of lool
+      deps:
+          - release:pre
+      cmds:
+          - cargo release patch --execute
