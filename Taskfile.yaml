@@ -34,10 +34,20 @@ tasks:
     cmds:
       - cargo +nightly fmt --all
 
+  fmt:check:
+    desc: 🎨 check format
+    cmds:
+        - cargo +nightly fmt --all --check
+
   lint:
     desc: 🧶 lint lool
     cmds:
       - cargo clippy --fix --all-features --allow-staged
+
+  lint:check:
+    desc: 🧶 check linting
+    cmds:
+        - cargo clippy --all-features --allow-staged
 
   test:
     desc: 🧪 test lool
@@ -64,6 +74,12 @@ tasks:
         - release:pre
     cmds:
         - cargo release major --execute --no-confirm
+
+  release:pre:
+    desc: 🚀 prerelease rustler-core
+    deps:
+        - fmt:check
+        - lint:check
 
   release:
       aliases:
