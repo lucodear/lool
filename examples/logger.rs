@@ -1,10 +1,18 @@
+use eyre::Result;
 use lool::logger::{debug, error, info, trace, warn, ConsoleLogger, Level};
 
-fn main() {
-    ConsoleLogger::default_setup(Level::Trace, "test").unwrap();
+fn main() -> Result<()> {
+    ConsoleLogger::builder()
+        .with_name("test")
+        .with_level(Level::Trace)
+        .ignore("examples/logger.rs")
+        .install()?;
+
     info!("log line");
     warn!("log line");
     error!("log line");
     debug!("log line");
     trace!("log line");
+
+    Ok(())
 }
