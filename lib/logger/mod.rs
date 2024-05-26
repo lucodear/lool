@@ -120,7 +120,7 @@ impl ConsoleLogger {
     }
 
     /// returns true if the context should be ignored
-    fn should_ignore(&self, ctx: &String) -> bool {
+    fn should_ignore(&self, ctx: &str) -> bool {
         for glob in &self.ctx_ignore_globs {
             if glob_match(glob, ctx) {
                 return true;
@@ -270,7 +270,7 @@ impl SetupBuilder {
         let logger = Box::new(ConsoleLogger {
             name: self.name.unwrap_or("".to_string()),
             time_fn: self.time_fn.unwrap_or(datetime::utc_current_time),
-            ctx_ignore_globs: self.ctx_ignore_globs.unwrap_or(vec![]),
+            ctx_ignore_globs: self.ctx_ignore_globs.unwrap_or_default(),
         });
         log::set_logger(Box::leak(logger) as &'static dyn Log)
             .map(|()| log::set_max_level(self.max_level.unwrap().to_level_filter()))

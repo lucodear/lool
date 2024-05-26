@@ -1,5 +1,7 @@
-use eyre::Result;
-use lool::logger::{debug, error, info, trace, warn, ConsoleLogger, Level};
+use {
+    eyre::Result,
+    lool::logger::{debug, error, info, trace, warn, ConsoleLogger, Level},
+};
 
 fn main() -> Result<()> {
     ConsoleLogger::builder()
