@@ -21,5 +21,8 @@
         ".gitignore": true,
         ".vscode": true,
         ".git": true,
+    },
+    "[rust]": {
+        "editor.formatOnSave": true
     }
 }
