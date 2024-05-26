@@ -1,4 +1,5 @@
 pub mod datetime;
+use glob_match::glob_match;
 pub use log::{
     debug, error, info, set_max_level, trace, warn, Level, LevelFilter, Log, Metadata, Record,
 };
@@ -70,7 +71,7 @@ impl StyledRecord {
 pub struct ConsoleLogger {
     name: String,
     time_fn: fn() -> String,
-    ignored_ctx: Vec<String>,
+    ctx_ignore_globs: Vec<String>,
 }
 
 impl ConsoleLogger {
@@ -81,7 +82,7 @@ impl ConsoleLogger {
         let logger = Box::new(ConsoleLogger {
             name: context.as_ref().to_string(),
             time_fn: datetime::utc_current_time,
-            ignored_ctx: vec![],
+            ctx_ignore_globs: vec![],
         });
         log::set_logger(Box::leak(logger) as &'static dyn Log)
             .map(|()| log::set_max_level(max_level.to_level_filter()))
@@ -102,7 +103,7 @@ impl ConsoleLogger {
         let logger = Box::new(ConsoleLogger {
             name: context.as_ref().to_string(),
             time_fn,
-            ignored_ctx: vec![],
+            ctx_ignore_globs: vec![],
         });
         log::set_logger(Box::leak(logger) as &'static dyn Log)
             .map(|()| log::set_max_level(max_level.to_level_filter()))
@@ -120,7 +121,12 @@ impl ConsoleLogger {
 
     /// returns true if the context should be ignored
     fn should_ignore(&self, ctx: &String) -> bool {
-        self.ignored_ctx.contains(ctx)
+        for glob in &self.ctx_ignore_globs {
+            if glob_match(glob, ctx) {
+                return true;
+            }
+        }
+        false
     }
 }
 
@@ -168,8 +174,8 @@ impl Log for ConsoleLogger {
 ///
 /// this struct is used to set up the logger with more flexibility.
 ///
-/// It allows for setting the logger name, the time function, the ignored contexts, and the max
-/// level.
+/// It allows for setting the logger name, the time function, the ignored contexts/globs, and the
+/// max level.
 ///
 /// The `install` method is used to build and install the logger. Should be called at the end of the
 /// builder chain.
@@ -193,7 +199,7 @@ impl Log for ConsoleLogger {
 pub struct SetupBuilder {
     name: Option<String>,
     time_fn: Option<fn() -> String>,
-    ignored_ctx: Option<Vec<String>>,
+    ctx_ignore_globs: Option<Vec<String>>,
     max_level: Option<Level>,
 }
 
@@ -202,7 +208,7 @@ impl Default for SetupBuilder {
         Self {
             name: Some("".to_string()),
             time_fn: Some(datetime::utc_current_time),
-            ignored_ctx: Some(vec![]),
+            ctx_ignore_globs: Some(vec![]),
             max_level: Some(Level::Info),
         }
     }
@@ -235,21 +241,25 @@ impl SetupBuilder {
 
     /// **🧉 » `ignore_all`**
     ///
-    /// Sets the ignored contexts from a list of strings
-    pub fn ignore_all(mut self, ignored_ctx: Vec<String>) -> Self {
-        self.ignored_ctx = Some(ignored_ctx);
+    /// Sets the ignored contexts/context globs from a list of strings.
+    ///
+    /// Globs are allowed.
+    pub fn ignore_all(mut self, ctx_ignored_globs: Vec<String>) -> Self {
+        self.ctx_ignore_globs = Some(ctx_ignored_globs);
         self
     }
 
     /// **🧉 » `ignore`**
     ///
-    /// Adds a context to the ignored list.
+    /// Adds a context/context glob to the ignored list.
     ///
     /// Unlike `ignore_all`, this method allows for adding a single ignored context at a time.
-    pub fn ignore<Str: AsRef<str>>(mut self, ctx: Str) -> Self {
-        let mut ignored_ctx = self.ignored_ctx.unwrap();
-        ignored_ctx.push(ctx.as_ref().to_string());
-        self.ignored_ctx = Some(ignored_ctx);
+    ///
+    /// Globs are allowed.
+    pub fn ignore<Str: AsRef<str>>(mut self, glob: Str) -> Self {
+        let mut ignored_ctx = self.ctx_ignore_globs.unwrap();
+        ignored_ctx.push(glob.as_ref().to_string());
+        self.ctx_ignore_globs = Some(ignored_ctx);
         self
     }
 
@@ -260,7 +270,7 @@ impl SetupBuilder {
         let logger = Box::new(ConsoleLogger {
             name: self.name.unwrap_or("".to_string()),
             time_fn: self.time_fn.unwrap_or(datetime::utc_current_time),
-            ignored_ctx: self.ignored_ctx.unwrap_or(vec![]),
+            ctx_ignore_globs: self.ctx_ignore_globs.unwrap_or(vec![]),
         });
         log::set_logger(Box::leak(logger) as &'static dyn Log)
             .map(|()| log::set_max_level(self.max_level.unwrap().to_level_filter()))
