@@ -181,11 +181,7 @@ impl<Tz: TimeZone> LoolDate<Tz> {
     pub fn set_nanos(&mut self, nanos: u32) {
         // avoid `whith_nanosecond` returning None for > 2_000_000_000 values
         // so we can safely unwrap the result
-        let nanos = if nanos > 2_000_000_000 {
-            1_999_999_999
-        } else {
-            nanos
-        };
+        let nanos = if nanos > 2_000_000_000 { 1_999_999_999 } else { nanos };
         self.date = self.date.with_nanosecond(nanos).unwrap();
     }
 
@@ -193,11 +189,7 @@ impl<Tz: TimeZone> LoolDate<Tz> {
     ///
     /// values greater than `2,000,000` will be clamped to `1,999,999`
     pub fn set_micros(&mut self, micros: u32) {
-        let micros = if micros > 2_000_000 {
-            1_999_999
-        } else {
-            micros
-        };
+        let micros = if micros > 2_000_000 { 1_999_999 } else { micros };
         self.date = self.date.with_nanosecond(micros * 1_000).unwrap();
     }
 

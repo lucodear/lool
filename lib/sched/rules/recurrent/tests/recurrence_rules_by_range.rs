@@ -14,11 +14,7 @@ fn between_10_and_20_seconds() {
 
     for i in 0..20 {
         let addend = if i < 11 { i } else { i - 10 - 1 };
-        let minute = if i < 11 {
-            initial_minute
-        } else {
-            initial_minute + 1
-        };
+        let minute = if i < 11 { initial_minute } else { initial_minute + 1 };
 
         next = rules.next_match_from(next).unwrap();
         println!("[{i}]: {:?}", next);

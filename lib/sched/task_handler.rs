@@ -118,11 +118,7 @@ pub(crate) fn get_next_run_time(
 ) -> Option<DateTime<Local>> {
     let mut next_run_so_far: Option<DateTime<Local>> = None;
 
-    let base = if let Some(from) = from {
-        from
-    } else {
-        Local::now()
-    };
+    let base = if let Some(from) = from { from } else { Local::now() };
 
     for rule in rules {
         let rule_next_run = rule.next_from(base);
