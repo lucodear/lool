@@ -155,11 +155,13 @@ impl Log for ConsoleLogger {
             format!(" {} ", styled_record.time)
         };
 
-        let (ctx, ctx_separator) = if self.name.is_empty() {
-            ("".to_string(), "".to_string())
+        let ctx = if self.name.is_empty() {
+            "".to_string()
         } else {
-            (format!("{} »", self.name), ":".to_string())
+            format!("{} »", self.name)
         };
+
+        let ctx_separator = if styled_record.line.is_empty() { "" } else { ":" };
 
         // print to stdout
         println!(
