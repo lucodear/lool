@@ -32,8 +32,6 @@ impl StyledRecord {
             Level::Trace => "\x1b[34m", // blue
         };
 
-        let file_ansi_color = "\x1b[34m"; // blue
-        let line_ansi_color = "\x1b[34;1m"; // bold blue
         let mut time = get_time();
 
         if !time.is_empty() {
@@ -42,21 +40,29 @@ impl StyledRecord {
 
         let file = Path::new(record.file().unwrap_or("unknown"));
 
+        let (ctx, file_ansi_color, line_ansi_color) = match file.is_absolute() {
+            true => (
+                record.module_path().unwrap_or("unknown"),
+                "\x1b[95m", // blue
+                "",         // bold blue
+            ),
+            false => (
+                file.to_str().unwrap_or("unknown"),
+                "\x1b[34m",   // blue
+                "\x1b[34;1m", // nada
+            ),
+        };
+
         let line = match file.is_absolute() {
             true => String::from(""),
             false => format!("{}{}{}", line_ansi_color, record.line().unwrap_or(0), RESET),
         };
 
-        let file = match file.is_absolute() {
-            true => record.module_path().unwrap_or("unknown"),
-            false => file.to_str().unwrap_or("unknown"),
-        };
-
         Self {
             level: format!("{}{:<5}{}", ansi_style_level, record.level(), RESET),
             message: format!("{}", record.args()),
-            ctx: format!("{}{}{}", file_ansi_color, file.replace('\\', "/"), RESET),
-            raw_ctx: file.replace('\\', "/"),
+            ctx: format!("{}{}{}", file_ansi_color, ctx.replace('\\', "/"), RESET),
+            raw_ctx: ctx.replace('\\', "/"),
             line,
             time,
         }
@@ -149,19 +155,20 @@ impl Log for ConsoleLogger {
             format!(" {} ", styled_record.time)
         };
 
-        let ctx = if self.name.is_empty() {
-            "".to_string()
+        let (ctx, ctx_separator) = if self.name.is_empty() {
+            ("".to_string(), "".to_string())
         } else {
-            format!("{} »", self.name)
+            (format!("{} »", self.name), ":".to_string())
         };
 
         // print to stdout
         println!(
-            "{}{}| {} | {}:{} - {}",
+            "{}{}| {} | {}{}{} - {}",
             ctx,
             time,
             styled_record.level,
             styled_record.ctx,
+            ctx_separator,
             styled_record.line,
             styled_record.message
         );
