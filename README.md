@@ -19,6 +19,7 @@ several features and "sub-features".
 ## Main features
 
 - [x] [cli](lib/cli)&nbsp;&nbsp;<a href="#"><img alt="has subfeatures" src=".github/img/icon-has-submodules.svg" height="12"></a>
+- [x] [di](lib/di)
 - [x] [logging](lib/logger)
 - [x] [macros](lib/macros)
 - [x] [sched](lib/sched)&nbsp;&nbsp;<a href="#"><img alt="has subfeatures" src=".github/img/icon-has-submodules.svg" height="12"></a>
