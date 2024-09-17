@@ -200,6 +200,7 @@ pub fn key_event_to_string(key_event: &KeyEvent) -> String {
     key
 }
 
+/// Parses a string into a vector of [`KeyEvent`]
 pub fn parse_key_sequence(raw: &str) -> Result<Vec<KeyEvent>> {
     if raw.chars().filter(|c| *c == '>').count() != raw.chars().filter(|c| *c == '<').count() {
         return Err(eyre::eyre!("Invalid key sequence: `{}`", raw));
