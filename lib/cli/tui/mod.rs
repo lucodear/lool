@@ -30,7 +30,7 @@ pub mod utils {
 }
 
 // ratatui prelude
-pub mod rataui {
+pub mod ratatui {
     pub use ratatui::prelude::*;
 }
 
