@@ -5,6 +5,9 @@
 #[cfg(feature = "cli")]
 pub mod cli;
 
+#[cfg(feature = "cli.tui")]
+pub use cli::tui;
+
 #[cfg(feature = "sched")]
 pub mod sched;
 

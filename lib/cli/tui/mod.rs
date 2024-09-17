@@ -1,11 +1,35 @@
-use {eyre::Result, palette::rgb::Rgb, ratatui::style::Color, std::str::FromStr};
-
-pub mod framework {
+mod framework {
     pub mod app;
     pub mod component;
     pub mod events;
     pub mod keyboard;
     pub mod tui;
+}
+
+use {eyre::Result, palette::rgb::Rgb, ratatui::style::Color, std::str::FromStr};
+
+pub use framework::app::{App, Kb};
+pub use framework::component::{Children, Component};
+pub use framework::events::{Action, Event};
+pub use framework::keyboard::KeyBindings;
+pub use framework::tui::{Frame, Tui, IO};
+
+pub mod utils {
+    pub mod component {
+        pub use super::super::framework::component::{
+            child_downcast, child_downcast_mut, init_children, pass_action_handler_to_children,
+            pass_message_to_children, update_children,
+        };
+    }
+
+    pub mod keyboard {
+        pub use super::super::framework::keyboard::{key_event_to_string, parse_key_sequence};
+    }
+}
+
+// ratatui prelude
+pub mod rataui {
+    pub use ratatui::prelude::*;
 }
 
 #[macro_export]

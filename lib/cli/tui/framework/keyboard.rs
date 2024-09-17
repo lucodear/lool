@@ -6,11 +6,15 @@ use {
 };
 
 #[derive(Clone, Debug, Default)]
-pub struct Config {
-    pub keybindings: KeyBindings,
-}
-
-#[derive(Clone, Debug, Default)]
+/// A struct that holds key bindings
+///
+/// The key bindings are stored in a hashmap where the key is a vector of
+/// [`crossterm::event::KeyEvent`] and the value is a
+/// [`Action`](crate::tui::Action). This is constructed automatically by [`Kb`](crate::tui::Kb)
+/// using a [`str`] to [`Action`](crate::tui::Action) mapping, using special syntax to represent
+/// keys and key sequences (see
+/// [`parse_key_sequence`](crate::tui::utils::keyboard::parse_key_sequence) and
+/// [`Kb`](crate::tui::Kb) for more information).
 pub struct KeyBindings(pub HashMap<Vec<KeyEvent>, Action>);
 
 impl KeyBindings {
@@ -35,12 +39,18 @@ impl KeyBindings {
     }
 }
 
-fn parse_key_event(raw: &str) -> Result<KeyEvent, String> {
+/// `@internal`
+///
+/// Parses a string into a [`KeyEvent`]
+fn parse_key_event(raw: &str) -> Result<KeyEvent> {
     let raw_lower = raw.to_ascii_lowercase();
     let (remaining, modifiers) = extract_modifiers(&raw_lower);
     parse_key_code_with_modifiers(remaining, modifiers)
 }
 
+/// `@internal`
+///
+/// Extracts the modifiers from a string formatted as `modifier-key`
 fn extract_modifiers(raw: &str) -> (&str, KeyModifiers) {
     let mut modifiers = KeyModifiers::empty();
     let mut current = raw;
@@ -66,10 +76,10 @@ fn extract_modifiers(raw: &str) -> (&str, KeyModifiers) {
     (current, modifiers)
 }
 
-fn parse_key_code_with_modifiers(
-    raw: &str,
-    mut modifiers: KeyModifiers,
-) -> Result<KeyEvent, String> {
+/// `@internal`
+///
+/// Parses a string into a [`KeyEvent`] with modifiers
+fn parse_key_code_with_modifiers(raw: &str, mut modifiers: KeyModifiers) -> Result<KeyEvent> {
     let c = match raw {
         "esc" => KeyCode::Esc,
         "enter" => KeyCode::Enter,
@@ -111,11 +121,12 @@ fn parse_key_code_with_modifiers(
             }
             KeyCode::Char(c)
         }
-        _ => return Err(format!("Unable to parse {raw}")),
+        _ => return Err(eyre::eyre!("Unable to parse `{}`", raw)),
     };
     Ok(KeyEvent::new(c, modifiers))
 }
 
+/// Converts a [`KeyEvent`] to a string representation
 pub fn key_event_to_string(key_event: &KeyEvent) -> String {
     let char;
     let key_code = match key_event.code {
@@ -189,9 +200,9 @@ pub fn key_event_to_string(key_event: &KeyEvent) -> String {
     key
 }
 
-pub fn parse_key_sequence(raw: &str) -> Result<Vec<KeyEvent>, String> {
+pub fn parse_key_sequence(raw: &str) -> Result<Vec<KeyEvent>> {
     if raw.chars().filter(|c| *c == '>').count() != raw.chars().filter(|c| *c == '<').count() {
-        return Err(format!("Unable to parse `{}`", raw));
+        return Err(eyre::eyre!("Invalid key sequence: `{}`", raw));
     }
     let raw = if !raw.contains("><") {
         let raw = raw.strip_prefix('<').unwrap_or(raw);

@@ -22,10 +22,8 @@ use {
     tokio_util::sync::CancellationToken,
 };
 
-pub use ratatui::prelude::{Color, Constraint, Direction, Layout, Rect, Size};
-
 pub type IO = std::io::Stdout;
-pub fn io() -> IO {
+fn io() -> IO {
     std::io::stdout()
 }
 pub type Frame<'a> = ratatui::Frame<'a>;

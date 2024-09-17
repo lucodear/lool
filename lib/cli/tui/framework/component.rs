@@ -251,8 +251,8 @@ impl_downcast!(Component);
 /// Update the children's state based on a received action.
 ///
 /// This helper function is used to update the children's state based on a received action. It was
-/// created to allow to easily override the default `update` method of a component implementation and
-/// be able to call the children's `update` method.
+/// created to allow to easily override the default `update` method of a component implementation
+/// and still be able to call the children's `update` method.
 pub fn update_children<T: Component + ?Sized>(this: &mut T, action: Action) -> Result<()> {
     if let Some(children) = this.get_children() {
         for child in children.values_mut() {
@@ -267,7 +267,7 @@ pub fn update_children<T: Component + ?Sized>(this: &mut T, action: Action) -> R
 ///
 /// This helper function is used to pass a message to the children of a component. It was created
 /// to allow to easily override the default `receive_message` method of a component implementation
-/// and be able pass the call to the children's `receive_message` method.
+/// and still be able pass the call to the children's `receive_message` method.
 pub fn pass_message_to_children<T: Component + ?Sized>(
     this: &mut T,
     message: String,
@@ -284,8 +284,8 @@ pub fn pass_message_to_children<T: Component + ?Sized>(
 /// Initialize the children of a component.
 ///
 /// This helper function is used to initialize the children of a component. It was created to
-/// allow to easily override the default `init` method of a component implementation and be able
-/// to call the children's `init` method.
+/// allow to easily override the default `init` method of a component implementation and still be
+/// able to call the children's `init` method.
 pub fn init_children<T: Component + ?Sized>(this: &mut T, area: Size) -> Result<()> {
     if let Some(children) = this.get_children() {
         for child in children.values_mut() {
@@ -300,7 +300,7 @@ pub fn init_children<T: Component + ?Sized>(this: &mut T, area: Size) -> Result<
 ///
 /// This helper function is used to pass the action handler to the children of a component. It was
 /// created to allow to easily override the default `register_action_handler` method of a component
-/// implementation and be able to call the children's `register_action_handler` method.
+/// implementation and still be able to call the children's `register_action_handler` method.
 pub fn pass_action_handler_to_children<T: Component + ?Sized>(
     this: &mut T,
     tx: UnboundedSender<String>,
