@@ -8,11 +8,13 @@ mod framework {
 
 use {eyre::Result, palette::rgb::Rgb, ratatui::style::Color, std::str::FromStr};
 
-pub use framework::app::{App, Kb};
-pub use framework::component::{Children, Component};
-pub use framework::events::{Action, Event};
-pub use framework::keyboard::KeyBindings;
-pub use framework::tui::{Frame, Tui, IO};
+pub use framework::{
+    app::{App, Kb},
+    component::{Children, Component},
+    events::{Action, Event},
+    keyboard::KeyBindings,
+    tui::{Frame, Tui, IO},
+};
 
 pub mod utils {
     pub mod component {
