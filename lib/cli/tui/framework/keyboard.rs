@@ -21,8 +21,8 @@ impl KeyBindings {
                 let action = Action::from_str(&cmd);
 
                 match action {
-                    Ok(action) => (parse_key_sequence(&key_str).unwrap(), action),
-                    Err(_) => (parse_key_sequence(&key_str).unwrap(), Action::AppAction(cmd)),
+                    Ok(action) => (parse_key_sequence(key_str).unwrap(), action),
+                    Err(_) => (parse_key_sequence(key_str).unwrap(), Action::AppAction(cmd)),
                 }
             })
             .collect();
@@ -137,7 +137,7 @@ pub fn key_event_to_string(key_event: &KeyEvent) -> String {
             char = format!("f({c})");
             &char
         }
-        KeyCode::Char(c) if c == ' ' => "space",
+        KeyCode::Char(' ') => "space",
         KeyCode::Char(c) => {
             char = c.to_string();
             &char

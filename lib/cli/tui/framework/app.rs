@@ -79,7 +79,7 @@ impl App {
                     Event::Render => self.send(Action::Render)?,
                     // Event::Resize(x, y) => self.send(Action::Resize(x, y))?,
                     Event::Key(key) => {
-                        if let Some(action) = self.keybindings.get(&vec![key]) {
+                        if let Some(action) = self.keybindings.get(&[key]) {
                             self.send(action.clone())?;
                         } else {
                             // If the key was not handled as a single key action,
