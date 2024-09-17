@@ -81,6 +81,9 @@ pub trait Component: Downcast {
         let action = match event {
             Some(Event::Key(key_event)) => self.handle_key_events(key_event)?,
             Some(Event::Mouse(mouse_event)) => self.handle_mouse_events(mouse_event)?,
+            Some(Event::Tick) => self.handle_tick_event()?,
+            Some(Event::Render) => self.handle_frame_event()?,
+            Some(Event::Paste(ref event)) => self.handle_paste_event(event.clone())?,
             _ => None,
         };
 
@@ -123,6 +126,48 @@ pub trait Component: Downcast {
     /// * `Result<Option<Action>>` - An action to be processed or none.
     #[allow(unused_variables)]
     fn handle_mouse_events(&mut self, mouse: MouseEvent) -> Result<Option<Action>> {
+        Ok(None)
+    }
+
+    /// Handle Tick events and produce actions if necessary.
+    ///
+    /// # Arguments
+    ///
+    /// * `tick` - A tick event to be processed.
+    ///
+    /// # Returns
+    ///
+    /// * `Result<Option<Action>>` - An action to be processed or none.
+    #[allow(unused_variables)]
+    fn handle_tick_event(&mut self) -> Result<Option<Action>> {
+        Ok(None)
+    }
+
+    /// Handle frame events and produce actions if necessary.
+    ///
+    /// # Arguments
+    ///
+    /// * `tick` - A tick event to be processed.
+    ///
+    /// # Returns
+    ///
+    /// * `Result<Option<Action>>` - An action to be processed or none.
+    #[allow(unused_variables)]
+    fn handle_frame_event(&mut self) -> Result<Option<Action>> {
+        Ok(None)
+    }
+
+    /// Handle paste events and produce actions if necessary.
+    ///
+    /// # Arguments
+    ///
+    /// * `message` - A string message to be processed.
+    ///
+    /// # Returns
+    ///
+    /// * `Result<Option<Action>>` - An action to be processed or none.
+    #[allow(unused_variables)]
+    fn handle_paste_event(&mut self, message: String) -> Result<Option<Action>> {
         Ok(None)
     }
 
