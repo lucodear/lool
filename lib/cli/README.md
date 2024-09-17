@@ -22,3 +22,4 @@ cargo add lool --registry=lugit --features cli {sub-feature}
 # Sub-Features
 
 - [x] [`stylize`](./stylize): colorize and stylize text for the terminal.
+- [x] [`tui`](./tui): build terminal user interfaces with ratatui.
