@@ -32,6 +32,7 @@ pub mod utils {
 // ratatui prelude
 pub mod ratatui {
     pub use ratatui::prelude::*;
+    pub use ratatui::*;
 }
 
 #[macro_export]
