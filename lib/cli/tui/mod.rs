@@ -16,7 +16,7 @@ macro_rules! components {
             $(
                 temp_vec.push(
                     Box::new($x)
-                        as Box<dyn tui::framework::component::Component $( $t + )* >
+                        as Box<dyn lool::cli::tui::framework::component::Component $( $t + )* >
                 );
             )*
             temp_vec
@@ -32,7 +32,7 @@ macro_rules! children {
             $(
                 map.insert(
                     $name.to_string(),
-                    Box::new($value) as Box<dyn tui::framework::component::Component>
+                    Box::new($value) as Box<dyn lool::cli::tui::framework::component::Component>
                 );
             )*
             map
