@@ -22,9 +22,25 @@ debug-assertions = false
 path = "lib/lib.rs"
 
 [features]
-# cli utilities
+# cli/tui utilities
 "cli" = []
 "cli.stylize" = ["cli", "dep:bitflags"]
+"cli.tui" = [
+    "cli",
+    "dep:ratatui",
+    "dep:palette",
+    "dep:crossterm",
+    "dep:strum",
+    "dep:downcast-rs",
+    "dep:futures",
+    "dep:tokio",
+    "crossterm?/event-stream",
+    "strum?/derive",
+    "tokio?/tokio-macros",
+    "tokio?/macros",
+    "tokio?/sync",
+    "tokio?/time",
+]
 # logging
 "logger" = ["dep:log", "dep:glob-match"]
 # macros
@@ -52,13 +68,20 @@ path = "lib/lib.rs"
 eyre = { version = "0.6.12", default-features = false }
 
 # optional
-bitflags = { version = "2.5.0", optional = true }
+bitflags = { version = "2.6.0", optional = true }
 chrono = { version = "0.4.37", optional = true }
-log = { version = "0.4.21", optional = true }
-tokio = { version = "1.37.0", optional = true }
-croner = { version = "2.0.4", optional = true }
-num-traits = { version = "0.2.18", optional = true }
+log = { version = "0.4.22", optional = true }
+tokio = { version = "1.40.0", optional = true }
+croner = { version = "2.0.5", optional = true }
+num-traits = { version = "0.2.19", optional = true }
 glob-match = { version = "0.2.1", optional = true }
+tokio-util = { version = "0.7.12", optional = true }
+ratatui = { version = "0.28.1", optional = true }
+palette = { version = "0.7.6", optional = true }
+crossterm = { version="0.28.1", optional = true}
+strum = { version="0.26.1", optional = true }
+downcast-rs = { version="1.2.1", optional = true}
+futures = { version = "0.3.30", optional = true }
 
 
 [[example]]
