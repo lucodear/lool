@@ -34,6 +34,7 @@ path = "lib/lib.rs"
     "dep:downcast-rs",
     "dep:futures",
     "dep:tokio",
+    "dep:tokio-util",
     "crossterm?/event-stream",
     "strum?/derive",
     "tokio?/tokio-macros",
