@@ -105,8 +105,10 @@ impl App {
                 let mut actions = Vec::new();
 
                 for component in self.components.iter_mut() {
-                    let component_actions = component.handle_events(Some(e.clone()))?;
-                    actions.extend(component_actions);
+                    if component.is_active() {
+                        let component_actions = component.handle_events(Some(e.clone()))?;
+                        actions.extend(component_actions);
+                    }
                 }
 
                 for action in actions {
@@ -129,9 +131,11 @@ impl App {
                             let mut errors = Vec::new();
                             tui.draw(|f| {
                                 for component in self.components.iter_mut() {
-                                    let r = component.draw(f, f.area());
-                                    if let Err(e) = r {
-                                        errors.push(format!("Failed to draw: {:?}", e));
+                                    if component.is_active() {
+                                        let r = component.draw(f, f.area());
+                                        if let Err(e) = r {
+                                            errors.push(format!("Failed to draw: {:?}", e));
+                                        }
                                     }
                                 }
                             })?;
@@ -143,9 +147,11 @@ impl App {
                             let mut errors = Vec::new();
                             tui.draw(|f| {
                                 for component in self.components.iter_mut() {
-                                    let r = component.draw(f, f.area());
-                                    if let Err(e) = r {
-                                        errors.push(format!("Failed to draw: {:?}", e));
+                                    if component.is_active() {
+                                        let r = component.draw(f, f.area());
+                                        if let Err(e) = r {
+                                            errors.push(format!("Failed to draw: {:?}", e));
+                                        }
                                     }
                                 }
                             })?;
@@ -157,13 +163,17 @@ impl App {
                     }
 
                     for component in self.components.iter_mut() {
-                        component.update(a.clone())?;
+                        if component.is_active() {
+                            component.update(a.clone())?;
+                        }
                     }
                 } else {
                     // unrecognized action, might be a custom component action
                     // send it to all components as a raw string
                     for component in self.components.iter_mut() {
-                        let _ = component.receive_message(action.clone());
+                        if component.is_active() {
+                            let _ = component.receive_message(action.clone());
+                        }
                     }
                 }
             }

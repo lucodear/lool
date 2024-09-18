@@ -20,7 +20,7 @@ pub mod utils {
     pub mod component {
         pub use super::super::framework::component::{
             child_downcast, child_downcast_mut, init_children, pass_action_handler_to_children,
-            pass_message_to_children, update_children,
+            pass_message_to_children, set_active_on_children, update_children,
         };
     }
 

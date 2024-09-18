@@ -76,29 +76,35 @@ pub trait Component: Downcast {
     ///
     /// * `Result<Option<Action>>` - An action to be processed or none.
     fn handle_events(&mut self, event: Option<Event>) -> Result<Vec<Action>> {
-        let mut actions = vec![];
+        if self.is_active() {
+            let mut actions = vec![];
 
-        let action = match event {
-            Some(Event::Key(key_event)) => self.handle_key_events(key_event)?,
-            Some(Event::Mouse(mouse_event)) => self.handle_mouse_events(mouse_event)?,
-            Some(Event::Tick) => self.handle_tick_event()?,
-            Some(Event::Render) => self.handle_frame_event()?,
-            Some(Event::Paste(ref event)) => self.handle_paste_event(event.clone())?,
-            _ => None,
-        };
+            let action = match event {
+                Some(Event::Key(key_event)) => self.handle_key_events(key_event)?,
+                Some(Event::Mouse(mouse_event)) => self.handle_mouse_events(mouse_event)?,
+                Some(Event::Tick) => self.handle_tick_event()?,
+                Some(Event::Render) => self.handle_frame_event()?,
+                Some(Event::Paste(ref event)) => self.handle_paste_event(event.clone())?,
+                _ => None,
+            };
 
-        if let Some(action) = action {
-            actions.push(action);
-        }
-
-        if let Some(children) = self.get_children() {
-            for child in children.values_mut() {
-                let child_actions = child.handle_events(event.clone())?;
-                actions.extend(child_actions);
+            if let Some(action) = action {
+                actions.push(action);
             }
-        }
 
-        Ok(actions)
+            if let Some(children) = self.get_children() {
+                for child in children.values_mut() {
+                    if child.is_active() {
+                        let child_actions = child.handle_events(event.clone())?;
+                        actions.extend(child_actions);
+                    }
+                }
+            }
+
+            Ok(actions)
+        } else {
+            Ok(vec![])
+        }
     }
 
     /// Handle key events and produce actions if necessary.
@@ -288,7 +294,9 @@ pub trait Component: Downcast {
     ///
     /// # Arguments
     /// * `active` - The active state of the component.
-    fn set_active(&mut self, _active: bool) {}
+    fn set_active(&mut self, active: bool) {
+        set_active_on_children(self, active);
+    }
 }
 
 impl_downcast!(Component);
@@ -299,9 +307,13 @@ impl_downcast!(Component);
 /// created to allow to easily override the default `update` method of a component implementation
 /// and still be able to call the children's `update` method.
 pub fn update_children<T: Component + ?Sized>(this: &mut T, action: Action) -> Result<()> {
-    if let Some(children) = this.get_children() {
-        for child in children.values_mut() {
-            child.update(action.clone())?;
+    if this.is_active() {
+        if let Some(children) = this.get_children() {
+            for child in children.values_mut() {
+                if child.is_active() {
+                    child.update(action.clone())?;
+                }
+            }
         }
     }
 
@@ -317,13 +329,30 @@ pub fn pass_message_to_children<T: Component + ?Sized>(
     this: &mut T,
     message: String,
 ) -> Result<()> {
-    if let Some(children) = this.get_children() {
-        for child in children.values_mut() {
-            child.receive_message(message.clone())?;
+    if this.is_active() {
+        if let Some(children) = this.get_children() {
+            for child in children.values_mut() {
+                if child.is_active() {
+                    child.receive_message(message.clone())?;
+                }
+            }
         }
     }
 
     Ok(())
+}
+
+/// Set active/inactive to the children of a component.
+///
+/// This helper function is used to set active/inactive to the children of a component. It was
+/// created to allow to easily implement the default `set_active` method of a component
+/// implementation and be able to call the children's `set_active` method.
+pub fn set_active_on_children<T: Component + ?Sized>(this: &mut T, active: bool) {
+    if let Some(children) = this.get_children() {
+        for child in children.values_mut() {
+            child.set_active(active);
+        }
+    }
 }
 
 /// Initialize the children of a component.
