@@ -30,7 +30,7 @@ This module defines two primary elements:
  
 Together, these elements facilitate the creation of modular and interactive terminal applications.
 
-## Overview
+## Framework
 
 ### `App` Struct
 
@@ -166,4 +166,46 @@ fn receive_message(&mut self, message: String) {
         // Parse the message and do whatever is needed with the data
     }
 }
+```
+
+## Widgets
+
+Apart from the tui framework, this module also provides a set of reusable "ratatui-native" widgets
+that can be used. Theese are not components, but Widgets, just like native `Paragraph`, `Block`,
+etc.
+
+Right now, the following widgets are available:
+
+### `TextArea`
+
+This is a rip-off of the `TextArea` widget from the
+[`tui-rs`](https://github.com/rhysd/tui-textarea) crate, but with less capabilities. In summary,
+search, mouse support, copy, paste, and undo/redo functionalities were stripped off.
+
+This implementation also changes the default key bindings to be more similar to the ones used in
+the `coco` package (conventional commit cli utility). That is:
+
+- <kbd>Enter</kbd> won't add a new line. **why?** Because that way, we can use the <kbd>Enter</kbd>
+  key to submit the "form" or cofirm the input.
+- Removes all key bindings of stripped functionalities.
+
+#### Vakudation
+
+IN this implementation, the `TextArea` widget also supports validation. The validation is done by
+accepting any number of validation functions that will be called every time the validity of the
+text-area is checked.
+
+One can add as many validation functions as needed:
+
+```rust
+textarea..with_validations(vec![
+    |input: &str| {
+        if input.len() > 10 {
+            Err(format!("Input must be less than 10 characters"))
+        } else {
+            Ok(())
+        }
+    },
+    required_validator,
+]);
 ```

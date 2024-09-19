@@ -29,6 +29,11 @@ pub mod utils {
     }
 }
 
+#[cfg(feature = "cli.tui.widgets")]
+pub mod widgets {
+    pub mod textarea;
+}
+
 // ratatui prelude
 pub mod ratatui {
     pub use ratatui::{prelude::*, *};
