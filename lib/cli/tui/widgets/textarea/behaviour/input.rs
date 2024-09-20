@@ -3,7 +3,7 @@ use crossterm::event::{Event, KeyCode, KeyEvent, KeyEventKind, KeyModifiers};
 /// Backend-agnostic key input kind.
 ///
 /// This type is marked as `#[non_exhaustive]` since more keys may be supported in the future.
-#[derive(Clone, Copy, Debug, PartialEq, Hash, Eq)]
+#[derive(Clone, Copy, Debug, PartialEq, Hash, Eq, Default)]
 pub enum Key {
     /// Normal letter key input
     Char(char),
@@ -38,13 +38,8 @@ pub enum Key {
     /// Paste key. This key is supported by termwiz only
     Paste,
     /// An invalid key input (this key is always ignored by [`TextArea`](crate::TextArea))
+    #[default]
     Null,
-}
-
-impl Default for Key {
-    fn default() -> Self {
-        Key::Null
-    }
 }
 
 /// Backend-agnostic key input type.
@@ -104,7 +99,7 @@ impl Input {
                 ctrl: false,
                 alt: false,
                 ..
-            } => Some(c.clone()),
+            } => Some(*c),
             _ => None,
         }
     }
@@ -117,30 +112,27 @@ impl Input {
     /// - Char is \n or \r
     #[inline]
     pub fn is_newline_except_enter(&self) -> bool {
-        match self {
+        matches!(
+            self,
             Input {
                 key: Key::Char('\n' | '\r'),
                 ctrl: false,
                 alt: false,
                 ..
-            }
-            | Input {
+            } | Input {
                 key: Key::Enter,
                 ctrl: true,
                 ..
-            }
-            | Input {
+            } | Input {
                 key: Key::Enter,
                 alt: true,
                 ..
-            }
-            | Input {
+            } | Input {
                 key: Key::Enter,
                 shift: true,
                 ..
-            } => true,
-            _ => false,
-        }
+            }
+        )
     }
 
     /// Returns `true` if the Input represents a new line (including Enter key).
@@ -170,67 +162,67 @@ impl Input {
     /// Returns `true` if the Input is a Tab
     #[inline]
     pub fn is_tab(&self) -> bool {
-        return self.key == Key::Tab && !self.ctrl && !self.alt;
+        self.key == Key::Tab && !self.ctrl && !self.alt
     }
 
     /// Returns `true` if the Input is Backspace
     #[inline]
     pub fn is_backspace(&self) -> bool {
-        return self.key == Key::Backspace && !self.ctrl && !self.alt;
+        self.key == Key::Backspace && !self.ctrl && !self.alt
     }
 
     /// Returns `true` if the Input is Delete
     #[inline]
     pub fn is_delete(&self) -> bool {
-        return self.key == Key::Delete && !self.ctrl && !self.alt;
+        self.key == Key::Delete && !self.ctrl && !self.alt
     }
 
     /// Returns `true` if the Input is key down arrow
     #[inline]
     pub fn is_down(&self) -> bool {
-        return self.key == Key::Down && !self.ctrl && !self.alt;
+        self.key == Key::Down && !self.ctrl && !self.alt
     }
 
     /// Returns `true` if the Input is key up arrow
     #[inline]
     pub fn is_up(&self) -> bool {
-        return self.key == Key::Up && !self.ctrl && !self.alt;
+        self.key == Key::Up && !self.ctrl && !self.alt
     }
 
     /// Returns `true` if the Input is key left arrow
     #[inline]
     pub fn is_left(&self) -> bool {
-        return self.key == Key::Left && !self.ctrl && !self.alt;
+        self.key == Key::Left && !self.ctrl && !self.alt
     }
 
     /// Returns `true` if the Input is key right arrow
     #[inline]
     pub fn is_right(&self) -> bool {
-        return self.key == Key::Right && !self.ctrl && !self.alt;
+        self.key == Key::Right && !self.ctrl && !self.alt
     }
 
     /// Returns `true` if the Input is key Home
     #[inline]
     pub fn is_home(&self) -> bool {
-        return self.key == Key::Home;
+        self.key == Key::Home
     }
 
     /// Returns `true` if the Input is key End
     #[inline]
     pub fn is_end(&self) -> bool {
-        return self.key == Key::End;
+        self.key == Key::End
     }
 
     /// Returns `true` if the Input is ctrl+left
     #[inline]
     pub fn is_ctrl_left(&self) -> bool {
-        return self.key == Key::Left && self.ctrl && !self.alt;
+        self.key == Key::Left && self.ctrl && !self.alt
     }
 
     /// Returns `true` if the Input is ctrl+right
     #[inline]
     pub fn is_ctrl_right(&self) -> bool {
-        return self.key == Key::Right && self.ctrl && !self.alt;
+        self.key == Key::Right && self.ctrl && !self.alt
     }
 
     /// Returns a string representing the kind of key input.

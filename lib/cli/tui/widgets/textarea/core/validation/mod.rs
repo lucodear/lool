@@ -7,8 +7,10 @@ pub enum ValidationResult {
     Invalid(Vec<String>),
 }
 
+type ValidatorFnType = Arc<dyn Fn(&str) -> Result<(), String> + Send + Sync>;
+
 #[derive(Clone)]
-pub struct ValidatorFn(Arc<dyn Fn(&str) -> Result<(), String> + Send + Sync>);
+pub struct ValidatorFn(ValidatorFnType);
 
 impl ValidatorFn {
     pub fn new<F>(f: F) -> Self

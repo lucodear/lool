@@ -1,4 +1,4 @@
-use crate::tui::widgets::textarea::textarea::widget::Viewport;
+use crate::tui::widgets::textarea::core::widget::Viewport;
 
 /// Specify how to scroll the textarea.
 ///

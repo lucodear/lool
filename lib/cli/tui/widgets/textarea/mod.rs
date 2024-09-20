@@ -6,11 +6,11 @@ pub(super) mod behaviour {
     pub(super) mod util;
 }
 
-mod textarea;
+mod core;
 
 pub use {
     behaviour::input::{Input, Key},
-    textarea::{
+    core::{
         validation::{validators, ValidationResult},
         TextArea,
     },

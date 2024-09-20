@@ -261,6 +261,7 @@ pub trait Component: Downcast {
     ///
     /// # Returns
     /// * `Option<&Box<dyn Component>>` - A reference to the child component or none.
+    #[allow(clippy::borrowed_box)]
     fn child(&mut self, name: &str) -> Option<&Box<dyn Component>> {
         if let Some(children) = self.get_children() {
             children.get(name)

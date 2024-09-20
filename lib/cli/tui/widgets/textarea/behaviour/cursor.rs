@@ -1,6 +1,6 @@
 use {
     super::util::{find_word_start_backward, find_word_start_forward},
-    crate::tui::widgets::textarea::textarea::widget::Viewport,
+    crate::tui::widgets::textarea::core::widget::Viewport,
     std::cmp,
 };
 

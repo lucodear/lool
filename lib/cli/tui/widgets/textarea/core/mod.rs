@@ -512,5 +512,3 @@ impl<'a> TextArea<'a> {
         hl.into_spans()
     }
 }
-
-// Builder-Pattern methods
