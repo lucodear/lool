@@ -29,6 +29,11 @@ tasks:
     cmds:
       - cargo run --example=threadpool --release --features utils.threads
 
+  example:gridselector:
+    desc: 🚀 run lool «example widget_grid_selector»
+    cmds:
+      - cargo watch --features=cli.tui.widgets,tokio.rt -c -x "run --example widget_grid_selector"
+
   fmt:
     desc: 🎨 format lool
     cmds:

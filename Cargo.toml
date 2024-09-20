@@ -64,6 +64,11 @@ path = "lib/lib.rs"
 "utils" = []
 "utils.threads" = ["utils", "macros", "dep:log"]
 
+# tokio
+"tokio.rt" = [
+    "tokio?/rt"
+]
+
 
 [dependencies]
 # default
@@ -95,3 +100,13 @@ required-features = ["sched.threads", "sched.rule-recurrence"]
 name = "sched_tokio"
 path = "examples/sched_tokio.rs"
 required-features = ["sched.tokio", "sched.rule-recurrence"]
+
+[[example]]
+name = "widget_text_area"
+path = "examples/widget_text_area.rs"
+required-features = ["cli.tui.widgets", "tokio.rt"]
+
+[[example]]
+name = "widget_grid_selector"
+path = "examples/widget_grid_selector.rs"
+required-features = ["cli.tui.widgets", "tokio.rt"]

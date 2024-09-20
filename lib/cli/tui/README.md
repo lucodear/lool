@@ -209,3 +209,38 @@ textarea..with_validations(vec![
     required_validator,
 ]);
 ```
+
+## `GridSelector` Widget
+
+A selector restful widget that can be used to select items from a list. The items are displayed in a
+grid, and the user can navigate through them using, for example, the arrow keys.
+
+### Example
+
+See the [`widget_grid_selector.rs`](/examples/widget_grid_selector.rs) example for a full
+demonstration of how to use the `GridSelector` widget.
+
+In summary, the widget uses a `GridSelectorState` to keep track of the items and the state of the
+widget.
+
+The `GridSelectorState` takes a list of `GridItem`, which is a basic struct that encapsulates a 
+`String` value.
+
+The `GridSelectorState::new` method accepts a list of any type that can be converted to a
+`GridItem`:
+
+```rust
+pub fn new<I, T>(items: I) -> Self
+  where
+    I: IntoIterator<Item = T>,
+    T: Into<GridItem>, // Accept anything that can be converted into GridItem
+  {
+    ...
+  }
+}
+```
+
+As a part of this library, the `Into<GridItem>` trait is implemented for `String`, `&str`.
+
+The example at [`widget_grid_selector.rs`](/examples/widget_grid_selector.rs) demonstrates how to
+implement the `Into<GridItem>` trait for a custom type.

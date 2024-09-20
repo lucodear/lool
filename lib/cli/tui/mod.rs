@@ -31,6 +31,14 @@ pub mod utils {
 
 #[cfg(feature = "cli.tui.widgets")]
 pub mod widgets {
+    pub mod gridselector {
+        mod selector;
+        mod state;
+        mod widget;
+
+        pub use {selector::*, state::*};
+    }
+
     pub mod textarea;
 }
 
