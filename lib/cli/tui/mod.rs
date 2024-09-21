@@ -40,6 +40,11 @@ pub mod widgets {
     }
 
     pub mod textarea;
+
+    pub mod switch {
+        mod widget;
+        pub use widget::*;
+    }
 }
 
 // ratatui prelude

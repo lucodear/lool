@@ -110,3 +110,8 @@ required-features = ["cli.tui.widgets", "tokio.rt"]
 name = "widget_grid_selector"
 path = "examples/widget_grid_selector.rs"
 required-features = ["cli.tui.widgets", "tokio.rt"]
+
+[[example]]
+name = "widget_switch"
+path = "examples/widget_switch.rs"
+required-features = ["cli.tui.widgets", "tokio.rt"]

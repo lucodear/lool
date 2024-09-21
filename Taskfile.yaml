@@ -34,6 +34,11 @@ tasks:
     cmds:
       - cargo watch --features=cli.tui.widgets,tokio.rt -c -x "run --example widget_grid_selector"
 
+  example:switch:
+    desc: 🚀 run lool «example widget_switch»
+    cmds:
+      - cargo watch --features=cli.tui.widgets,tokio.rt -c -x "run --example widget_switch"
+
   fmt:
     desc: 🎨 format lool
     cmds:

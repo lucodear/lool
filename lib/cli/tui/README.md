@@ -244,3 +244,12 @@ As a part of this library, the `Into<GridItem>` trait is implemented for `String
 
 The example at [`widget_grid_selector.rs`](/examples/widget_grid_selector.rs) demonstrates how to
 implement the `Into<GridItem>` trait for a custom type.
+
+## `Switch` Widget
+
+A simple stateless switch widget that can be used to show visual feedback of a boolean state.
+
+### Example
+
+See the [`widget_switch.rs`](/examples/widget_switch.rs) example for a full demonstration of how to
+use the `Switch` widget.

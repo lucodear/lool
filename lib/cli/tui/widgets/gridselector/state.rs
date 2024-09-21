@@ -29,9 +29,9 @@ impl AsRef<str> for GridItem {
 }
 
 // convert Label into String
-impl Into<String> for GridItem {
-    fn into(self) -> String {
-        self.0.clone()
+impl From<GridItem> for String {
+    fn from(val: GridItem) -> Self {
+        val.0.clone()
     }
 }
 
