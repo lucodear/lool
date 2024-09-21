@@ -12,10 +12,6 @@ use ratatui::text::Text;
 pub struct GridItem(String);
 
 impl GridItem {
-    // pub fn new(value: String) -> Self {
-    //     Label(value)
-    // }
-
     // accept both String and &str
     pub fn new<S>(value: S) -> Self
     where
@@ -25,10 +21,17 @@ impl GridItem {
     }
 }
 
-// implement a way to convert Label into &str
+// convert Label into &str
 impl AsRef<str> for GridItem {
     fn as_ref(&self) -> &str {
         &self.0
+    }
+}
+
+// convert Label into String
+impl Into<String> for GridItem {
+    fn into(self) -> String {
+        self.0.clone()
     }
 }
 
