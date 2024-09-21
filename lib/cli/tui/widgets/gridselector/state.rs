@@ -91,6 +91,11 @@ impl GridSelectorState {
         self.selected.map(|i| self.items[i].clone())
     }
 
+    /// Get the index of the selected item.
+    pub fn selected_index(&self) -> Option<usize> {
+        self.selected
+    }
+
     /// Get the hovered item.
     pub fn hovered(&self) -> Option<GridItem> {
         self.hovered.map(|i| self.items[i].clone())
