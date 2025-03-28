@@ -1,5 +1,5 @@
 [registries.lugit]
-index = "sparse+http://lugit.local/api/packages/lucodear/cargo/"
+index = "sparse+https://git.lucode.dev/api/packages/lucas/cargo/"
 
 [registry]
 global-credential-providers = ["cargo:token"]
