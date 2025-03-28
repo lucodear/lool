@@ -4,7 +4,7 @@
 <br>
 <br>
 
-<p align="center"><b>𝐥𝐨𝐨𝐥</b> is a tool-box library with common utilities for <b>𝚕𝚞𝚌𝚘𝚍𝚎.𝚊𝚛</b> projects. 
+<p align="center"><b>𝐥𝐨𝐨𝐥</b> is a tool-box library with common utilities for <b>𝚕𝚞𝚌𝚘𝚍𝚎.dev</b> projects. 
 </p>
 
 <br>
